@@ -152,8 +152,8 @@ public abstract class Game extends JPanel {
     // this method will create a new Data Obj, TODO: is more appropiate for
     //TODO: this method to go in HighScores, or another class
     protected void saveData() {
-        Data data = new Data(2000, Data.getGameTypeToString(this), "jeff");//testing data/database obj
-        Database db = new Database("jdbc:sqlite:finalProject\\db\\matchingGamedb.db", "luke", "monroe");
+        Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");//testing data/database obj
+        Database db = new Database();
         db.insertDataIntoUsers(data);
         db.insertDataIntoScores(data);
         //db.printAllData();

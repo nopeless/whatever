@@ -3,9 +3,9 @@ package finalProject.src;
 import java.awt.*;
 import javax.swing.*;
 //to run this code you need the sql driver, either reference it in your ide or run the code via the terminal with the following lines while in the parent dir of finalProject (i.e you should be in dir 'C:Users/USERNAME/project' and the 'project' dir should contain 'finalProject'):
+//will need to update when more .java files are added to the project
 //javac -cp "finalProject/lib/sqlite-jdbc-3.47.0.0.jar;." finalProject/src/GameGUI.java finalProject/src/GameMenu.java finalProject/src/ImageCache.java finalProject/src/EasyGame.java finalProject/src/MediumGame.java finalProject/src/HardGame.java finalProject/src/Game.java finalProject/src/Card.java finalProject/src/Data.java finalProject/src/Database.java //compiles code
 //java -cp ".;finalProject/lib/sqlite-jdbc-3.47.0.0.jar" finalProject.src.GameGUI     //runs code
-
 
 //TODO: right now in many of the classes I have just set the fields and methods to protected,
 //TODO: but many of these should be changed to private or public as needed. 
@@ -14,7 +14,6 @@ import javax.swing.*;
 //TODO: of all the scores gotten by anyone who has played the game and maybe display like the top 10 somewhere in the game : edit this has mostly been done at least locally
 
 //TODO: Add some sounds, when you flip over matching pair, non matching pair, you finish the game, etc
-
 
 public class GameGUI extends JFrame {// could make it not extend JFrame by declaring and initializing a JFrame in the
                                      // initializeFrame method
