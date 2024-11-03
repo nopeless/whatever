@@ -12,15 +12,11 @@ public class Card extends JButton implements ActionListener {
 
     public Card(String imagePath, Game game) {
         icony = ImageCache.getImage(imagePath);
-        System.out.println(icony);
         backIcon = ImageCache.getImage(ImageCache.getImagePathArrayElement(8)); 
-       // setIcon(null); // Set the face-down icon (null) (button should be enabled)
         setFaceUp(false);
         this.game = game;
         setIcon(backIcon);
         setDisabledIcon(icony);
-        //setDisabledIcon(backIcon); // Set the face-up icon (loaded image)
-        //setIcon(null);
         addActionListener(this);
         }
 
@@ -42,10 +38,8 @@ public class Card extends JButton implements ActionListener {
 
     public void updateIconBasedOnFaceUp() {
         if (isFaceUp) {
-            //setDisabledIcon(icony);
             setEnabled(false);
         } else {
-            //setIcon(backIcon);
             setEnabled(true);
         }
     }

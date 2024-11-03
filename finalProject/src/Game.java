@@ -39,7 +39,7 @@ public abstract class Game extends JPanel {
         flip.setTitle(title);
         boardArrayList = new ArrayList<>();
         gameType = Data.getGameTypeToString(this);
-        saveData();// TODO: remove later, should go in HighScores class when created
+        //saveData();// TODO: remove later, should go in HighScores class when created
     }
 
     // this sets up some basic info for the board
@@ -159,16 +159,16 @@ public abstract class Game extends JPanel {
         this.score = score;
     }
 
-    // this method will create a new Data Obj, TODO: is more appropiate for
-    // TODO: this method to go in HighScores, or another class
-    protected void saveData() {
-        Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");// testing data/database obj
-        Database db = new Database();
-        db.insertDataIntoUsers(data);
-        db.insertDataIntoScores(data);
-        // db.printAllData();
-        db.selectAllData(10);
-    }
+    // // this method will create a new Data Obj, TODO: is more appropiate for
+    // // TODO: this method to go in HighScores, or another class
+    // protected void saveData() {
+    //     Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");// testing data/database obj
+    //     Database db = new Database();
+    //     db.insertDataIntoUsers(data);
+    //     db.insertDataIntoScores(data);
+    //     // db.printAllData();
+    //     db.selectAllData(10);
+    // }
 
     public int getNumOfFaceUpCards() {
         return numOfFaceUpCards;
@@ -211,7 +211,6 @@ public abstract class Game extends JPanel {
         if (getActionPerformedCounter() % 2 == 0) {// if first card is selected
             setClickedCardAndIcon(card);
         } else {// if second card is selected
-            //System.out.println(getClickedIcon().toString() + card.getIcon().toString());
             if (getClickedIcon().equals(card.getIcony())) {// if the clicked card icon in previous turn equals the card
                                                            // clicked icon this turn
                 getClickedCard().setCardMatched();
@@ -227,7 +226,6 @@ public abstract class Game extends JPanel {
     public void setClickedCardAndIcon(Card card) {
         clickedCard = card;
         clickedIcon = card.getIcony();
-        // card.setEnabled(false);
     }
 
 }
