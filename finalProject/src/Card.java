@@ -6,53 +6,54 @@ import java.awt.event.ActionListener;
 
 public class Card extends JButton implements ActionListener {
     protected boolean isFaceUp;
-    protected ImageIcon icon;
-    protected static int actionPerformedCounter = 0;//keeps track of how many cards have been flipped
-    protected static Icon clickedIcon;
-    protected static Card clickedCard;
+    protected ImageIcon icony;
+    private ImageIcon backIcon = null;
     protected Game game;
-    protected static int numOfFaceUpCards;
 
     public Card(String imagePath, Game game) {
-        icon = ImageCache.getImage(imagePath);
-        setIcon(null);//this sets the face down icon
-        isFaceUp = false;
+        icony = ImageCache.getImage(imagePath);
+        System.out.println(icony);
+        backIcon = ImageCache.getImage(ImageCache.getImagePathArrayElement(8)); 
+       // setIcon(null); // Set the face-down icon (null) (button should be enabled)
+        setFaceUp(false);
         this.game = game;
-        setDisabledIcon(icon);//this sets the face up icon
+        setIcon(backIcon);
+        setDisabledIcon(icony);
+        //setDisabledIcon(backIcon); // Set the face-up icon (loaded image)
+        //setIcon(null);
         addActionListener(this);
-    }
+        }
 
-    // click one card
-    // click another card
-    // check if they match
-    // if they do match leave them face up and disable their buttons
-    // if they do not match have them flip back down after a few seconds
     @Override
     public void actionPerformed(ActionEvent e) {
-            setIcon(icon);
-            isFaceUp = true;
-        if (actionPerformedCounter % 2 == 0) {// if first card is selected
-            clickedCard = this;
-            clickedIcon = this.icon;
-            setEnabled(false);
-            
-        }else {// if second card is selected
-            if (clickedIcon.equals(icon)) {// if the clicked card icon in previous turn equals the card clicked icon this
-                                                // turn
-                Game.setCardDisabled(clickedCard);
-                Game.setCardDisabled(this);
-                numOfFaceUpCards += 2;
-                game.isGameOver(game);//TODO: doesnt really make sense to be checking what type game is every time there is a match
-            } else {//else if the 2 clicked cards don't match
-
-                game.waitIfNoMatch(clickedCard, this);//
-            }
-        }
-        actionPerformedCounter++;
-    }  
+        game.handleCardClick(this);
+    }
 
     public void setFaceUp(boolean isFaceUp) {
         this.isFaceUp = isFaceUp;
+        updateIconBasedOnFaceUp();
+    }
+
+    public void setCardMatched() {
+        setEnabled(false);
+        //setFaceUp(true);//this is extra bc card is already face up bc it was clicked on
+        game.setNumOfFaceUpCards((game.getNumOfFaceUpCards() + 1));
+    }
+
+    public void updateIconBasedOnFaceUp() {
+        if (isFaceUp) {
+            //setDisabledIcon(icony);
+            setEnabled(false);
+        } else {
+            //setIcon(backIcon);
+            setEnabled(true);
+        }
+    }
+    public Icon getIcony(){
+        return icony;
+    }
+    public Icon getBackIcon(){
+        return backIcon;
     }
 
 }

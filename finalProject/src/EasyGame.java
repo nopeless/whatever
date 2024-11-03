@@ -10,7 +10,7 @@ public class EasyGame extends Game {
     }
 
     protected void isGameOver() {
-        if (Card.numOfFaceUpCards == 16) {
+        if (getNumOfFaceUpCards() == 16) {
             flip.clearPanel(); 
             flip.toGameMenu(flip); //temp way to just send you back to difficulty selection menu
             // TODO: send to end game sceen(that shows score, asks if you want to upload

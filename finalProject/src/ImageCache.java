@@ -61,6 +61,7 @@ public class ImageCache {
         imagePathArray.add("..\\CardSprites\\musicNote.png");
         imagePathArray.add("..\\CardSprites\\smiley.png");
         imagePathArray.add("..\\CardSprites\\turtle.jpg");
+        imagePathArray.add("..\\CardSprites\\back.jpg");
 
     }
 

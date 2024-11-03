@@ -9,39 +9,54 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+
+//looked up syntax related to Dotenv
 import io.github.cdimascio.dotenv.Dotenv;
 import java.nio.file.Paths;
 
 public class Database {
 
-    private String url;
-    private String username;
-    private String password;
     private Connection connection;
+    private static final String SELECT_DATA_SQL_STATEMENT = "SELECT u.username, g.gameType, s.score, s.timeStamp FROM Scores AS s JOIN Users AS u ON s.userId = u.id JOIN Games AS g ON s.gameId = g.id LIMIT ?";
+
 
     public Database() {
+        //load cred.env
         Dotenv dotenv = Dotenv.configure()
                 .directory(Paths.get("finalProject/private").toString())
                 .filename("cred.env")
                 .load();
 
-        this.url = dotenv.get("DB_URL");
-        this.username = dotenv.get("DB_USER");
-        this.password = dotenv.get("DB_PASSWORD");
-
         try {
             Class.forName("org.sqlite.JDBC");
             // Initialize the connection
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false); // Disable auto-commit
+
+            //gets credentials like url, username, password from cred.env and gets connection to remote db with them 
+            connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"), dotenv.get("DB_PASSWORD"));
+            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
             System.out.println("Database connection established.");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("JDBC Driver not found.");
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             System.out.println("Failed to establish database connection.");
         }
+    }
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("Database connection closed.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Failed to close database connection.");
+        }
+    }
+    
+    public Connection getConnection() {
+        return connection;
     }
 
     private void rollbackTransaction() {
@@ -51,11 +66,12 @@ public class Database {
                 System.out.println("Transaction rolled back.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             System.out.println("Failed to rollback transaction.");
         }
     }
 
+    //not used(only for testing)
     public boolean doesTablesExist() {
         String[] tables = { "Users", "Games", "Scores" };
         for (String table : tables) {
@@ -68,7 +84,7 @@ public class Database {
                     return false;
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 System.out.println("Error checking table existence: " + e.getMessage());
                 return false;
             }
@@ -76,23 +92,7 @@ public class Database {
         System.out.println("Tables exist.");
         return true;
     }
-
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Database connection closed.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Failed to close database connection.");
-        }
-    }
-
+//not used(only for testing)
     public void recreateScoresTable() {
         String dropTable = "DROP TABLE IF EXISTS Scores";
         String createTable = "CREATE TABLE Scores (\n"
@@ -116,7 +116,7 @@ public class Database {
             System.out.println("Error recreating Scores table: " + e.getMessage());
         }
     }
-
+//not used(only for testing)
     public void dropAllTables() {
         String dropUsersTable = "DROP TABLE IF EXISTS Users";
         String dropGamesTable = "DROP TABLE IF EXISTS Games";
@@ -135,7 +135,7 @@ public class Database {
             rollbackTransaction();
         }
     }
-
+//not used(only for testing)
     public void deleteAllDataFromTables() {
         String deleteUsersData = "DELETE FROM Users";
         String deleteGamesData = "DELETE FROM Games";
@@ -154,7 +154,7 @@ public class Database {
             rollbackTransaction();
         }
     }
-
+//not used(only for testing)
     public void createTables() {
         String sqlTable1 = "CREATE TABLE IF NOT EXISTS Users (\n"
                 + " id INT PRIMARY KEY AUTO_INCREMENT,\n"
@@ -199,7 +199,7 @@ public class Database {
             connection.commit(); // Commit transaction
             System.out.println("User inserted.");
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
             System.out.println("Error inserting user: " + e.getMessage());
         }
     }
@@ -251,10 +251,9 @@ public class Database {
     }
 
     public ArrayList<Data> selectAllData(int numOfRows) {
-        String sql = "SELECT u.username, g.gameType, s.score, s.timeStamp FROM Scores AS s JOIN Users AS u ON s.userId = u.id JOIN Games AS g ON s.gameId = g.id LIMIT ?";
         ArrayList<Data> dataList = new ArrayList<>();
 
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(SELECT_DATA_SQL_STATEMENT)) {
             pstmt.setInt(1, numOfRows);
             ResultSet rs = pstmt.executeQuery();
             connection.commit(); 
