@@ -22,7 +22,8 @@ public class Card extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        game.handleCardClick(this);
+        CardClickHandler click = new CardClickHandler(game);
+        click.handleCardClick(this);
     }
 
     public void setFaceUp(boolean isFaceUp) {
@@ -32,7 +33,6 @@ public class Card extends JButton implements ActionListener {
 
     public void setCardMatched() {
         setEnabled(false);
-        //setFaceUp(true);//this is extra bc card is already face up bc it was clicked on
         game.setNumOfFaceUpCards((game.getNumOfFaceUpCards() + 1));
     }
 

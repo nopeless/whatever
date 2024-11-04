@@ -55,6 +55,9 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         toGameMenu(this);
     }
 
+
+    //Different classes will call these methods to change what is shown on the screen
+
     // TODO: add class and method for highscore screen
 
     // TODO: add class and method for end game screen

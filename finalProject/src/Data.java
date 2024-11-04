@@ -1,6 +1,5 @@
 package finalProject.src;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 public class Data {
@@ -15,8 +14,7 @@ public class Data {
         this.gameType = gameType;
         this.name = name;
         time = new Timestamp(System.currentTimeMillis());
-        // call method to save data to database(DB is just going to be a txt file, or
-        // csv, or json[prob a csv that seems easiest])
+     
     }
    // public Data(){};
 

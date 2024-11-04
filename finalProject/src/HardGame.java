@@ -10,7 +10,7 @@ public class HardGame extends Game{
     }
     
     protected void isGameOver() {
-        if (Card.numOfFaceUpCards == 24) {
+        if (getNumOfFaceUpCards() == 24) {
             // TODO: send to end game sceen(that shows score, asks if you want to upload
             // TODO: score), which will then send you back to menu, after you click 'ok'
         }
