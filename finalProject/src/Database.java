@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.nio.file.Paths;
 
-public class Database implements SQLiteStatements, MySQLStatements{
+public class Database implements SQLiteStatements, MySQLStatements {
     private Connection connection;
-    private boolean soup = true;//controls if DB uses remote db or local db in the db directory(tr                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ue = local : false = remote)
+    private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
+                                // false = remote)
 
     public Database() {
-        //soup = localDb
+        // soup = localDb
         // load cred.env
         Dotenv dotenv = Dotenv.configure()
                 .directory(Paths.get("finalProject/private").toString())
@@ -38,7 +39,7 @@ public class Database implements SQLiteStatements, MySQLStatements{
                 System.out.println("Local database connection established.");
 
             } else {
-                //need to try this twice, wait a sec in between tries
+                // need to try this twice, wait a sec in between tries
                 connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
                         dotenv.get("DB_PASSWORD"));
                 System.out.println("Remote Database connection established.");
@@ -250,7 +251,7 @@ public class Database implements SQLiteStatements, MySQLStatements{
         return -1;
     }
 
-    public ArrayList<Data> selectAllData(int numOfRows) {
+    public ArrayList<Data> selectDataFromScores(int numOfRows) {
         ArrayList<Data> dataList = new ArrayList<>();
         String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_SQLITE_STATEMENT,
                 MySQLStatements.SELECT_DATA_MYSQL_STATEMENT);
@@ -267,9 +268,11 @@ public class Database implements SQLiteStatements, MySQLStatements{
                     String username = rs.getString("username");
                     String gameType = rs.getString("gameType");
                     int score = rs.getInt("score");
-                    if(soup){
-                        timeStamp = rs.getLong("timeStamp"); // Slight difference in how data is stored remotely vs locally means we need to retrieve data slightly differently
-                    }else{
+                    if (soup) {
+                        timeStamp = rs.getLong("timeStamp"); // Slight difference in how data is stored remotely vs
+                                                             // locally means we need to retrieve data slightly
+                                                             // differently
+                    } else {
                         timeStamp = rs.getTimestamp("timeStamp").getTime();
                     }
                     Data data = new Data(username, gameType, score, timeStamp);

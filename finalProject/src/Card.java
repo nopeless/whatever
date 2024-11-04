@@ -5,10 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Card extends JButton implements ActionListener {
-    protected boolean isFaceUp;
-    protected ImageIcon icony;
+    private boolean isFaceUp;
+    private ImageIcon icony;
     private ImageIcon backIcon = null;
-    protected Game game;
+    private Game game;
 
     public Card(String imagePath, Game game) {
         icony = ImageCache.getImage(imagePath);
@@ -29,6 +29,9 @@ public class Card extends JButton implements ActionListener {
     public void setFaceUp(boolean isFaceUp) {
         this.isFaceUp = isFaceUp;
         updateIconBasedOnFaceUp();
+    }
+    public boolean getFaceUp(){
+        return isFaceUp;
     }
 
     public void setCardMatched() {
