@@ -9,76 +9,47 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+
+//looked up syntax related to Dotenv
 import io.github.cdimascio.dotenv.Dotenv;
 import java.nio.file.Paths;
 
-public class Database {
-
-    private String url;
-    private String username;
-    private String password;
+public class Database implements SQLiteStatements, MySQLStatements {
     private Connection connection;
+    private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
+                                // false = remote)
 
     public Database() {
+        // soup = localDb
+        // load cred.env
         Dotenv dotenv = Dotenv.configure()
                 .directory(Paths.get("finalProject/private").toString())
                 .filename("cred.env")
                 .load();
 
-        this.url = dotenv.get("DB_URL");
-        this.username = dotenv.get("DB_USER");
-        this.password = dotenv.get("DB_PASSWORD");
-
         try {
-            Class.forName("org.sqlite.JDBC");
-            // Initialize the connection
-            connection = DriverManager.getConnection(url, username, password);
-            connection.setAutoCommit(false); // Disable auto-commit
-            System.out.println("Database connection established.");
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            if (soup) {
+                connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL);
+                if (!doesTablesExist()) {
+                    createTables();
+                    insertDataIntoGames();
+                    System.out.println("tables created");
+                }
+                System.out.println("Local database connection established.");
+
+            } else {
+                // need to try this twice, wait a sec in between tries
+                connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
+                        dotenv.get("DB_PASSWORD"));
+                System.out.println("Remote Database connection established.");
+            }
+            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
             System.out.println("JDBC Driver not found.");
         } catch (SQLException e) {
-            e.printStackTrace();
             System.out.println("Failed to establish database connection.");
         }
-    }
-
-    private void rollbackTransaction() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.rollback();
-                System.out.println("Transaction rolled back.");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Failed to rollback transaction.");
-        }
-    }
-
-    public boolean doesTablesExist() {
-        String[] tables = { "Users", "Games", "Scores" };
-        for (String table : tables) {
-            String sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=?";
-            try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-                pstmt.setString(1, table);
-                ResultSet rs = pstmt.executeQuery();
-                if (!rs.next()) {
-                    System.out.println("Tables don't exist.");
-                    return false;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-                System.out.println("Error checking table existence: " + e.getMessage());
-                return false;
-            }
-        }
-        System.out.println("Tables exist.");
-        return true;
-    }
-
-    public Connection getConnection() {
-        return connection;
     }
 
     public void closeConnection() {
@@ -93,6 +64,46 @@ public class Database {
         }
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
+    private void rollbackTransaction() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.rollback();
+                System.out.println("Transaction rolled back.");
+            }
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            System.out.println("Failed to rollback transaction.");
+        }
+    }
+
+    // not used(only for testing)
+    public boolean doesTablesExist() {
+        String[] tables = { "Users", "Games", "Scores" };
+        for (String table : tables) {
+            try (PreparedStatement pstmt = connection
+                    .prepareStatement(SQLiteStatements.SELECT_TABLE_FROM_DB_SQLITE_STATEMENT)) {
+                pstmt.setString(1, table);
+                ResultSet rs = pstmt.executeQuery();
+                connection.commit();
+                if (!rs.next()) {
+                    System.out.println("Tables don't exist.");
+                    return false;
+                }
+            } catch (SQLException e) {
+                // e.printStackTrace();
+                System.out.println("Error checking table existence: " + e.getMessage());
+                return false;
+            }
+        }
+        System.out.println("Tables exist.");
+        return true;
+    }
+
+    // not used(only for testing)
     public void recreateScoresTable() {
         String dropTable = "DROP TABLE IF EXISTS Scores";
         String createTable = "CREATE TABLE Scores (\n"
@@ -117,6 +128,7 @@ public class Database {
         }
     }
 
+    // not used(only for testing)
     public void dropAllTables() {
         String dropUsersTable = "DROP TABLE IF EXISTS Users";
         String dropGamesTable = "DROP TABLE IF EXISTS Games";
@@ -136,6 +148,7 @@ public class Database {
         }
     }
 
+    // not used(only for testing)
     public void deleteAllDataFromTables() {
         String deleteUsersData = "DELETE FROM Users";
         String deleteGamesData = "DELETE FROM Games";
@@ -155,32 +168,13 @@ public class Database {
         }
     }
 
+    // not used(only for testing)
     public void createTables() {
-        String sqlTable1 = "CREATE TABLE IF NOT EXISTS Users (\n"
-                + " id INT PRIMARY KEY AUTO_INCREMENT,\n"
-                + " username VARCHAR(25) NOT NULL UNIQUE\n"
-                + ");";
-
-        String sqlTable2 = "CREATE TABLE IF NOT EXISTS Games (\n"
-                + " id INT PRIMARY KEY AUTO_INCREMENT,\n"
-                + " gameType VARCHAR(10) NOT NULL UNIQUE\n"
-                + ");";
-
-        String sqlTable3 = "CREATE TABLE IF NOT EXISTS Scores (\n"
-                + " id INT PRIMARY KEY AUTO_INCREMENT,\n"
-                + " userId INT NOT NULL,\n"
-                + " gameId INT NOT NULL,\n"
-                + " score INT NOT NULL,\n"
-                + " timeStamp VARCHAR(50) NOT NULL,\n"
-                + " FOREIGN KEY (userId) REFERENCES Users(id),\n"
-                + " FOREIGN KEY (gameId) REFERENCES Games(id)\n"
-                + ");";
 
         try (Statement stmt = connection.createStatement()) {
-            connection.setAutoCommit(false); // Start transaction
-            stmt.execute(sqlTable1);
-            stmt.execute(sqlTable2);
-            stmt.execute(sqlTable3);
+            stmt.execute(SQLiteStatements.CREATE_USERS_TABLE_SQLITE_STATEMENT);
+            stmt.execute(SQLiteStatements.CREATE_GAMES_TABLE_SQLITE_STATEMENT);
+            stmt.execute(SQLiteStatements.CREATE_SCORES_TABLE_SQLITE_STATEMENT);
             connection.commit(); // Commit transaction
             System.out.println("Tables have been created successfully.");
         } catch (SQLException e) {
@@ -191,7 +185,8 @@ public class Database {
     }
 
     public void insertDataIntoUsers(Data data) {
-        String sql = "INSERT IGNORE INTO Users(username) VALUES(?)";
+        String sql = getSQLStatement(SQLiteStatements.INSERT_USERS_SQLITE_STATEMENT,
+                MySQLStatements.INSERT_USERS_MYSQL_STATEMENT);
 
         try (PreparedStatement sqlStatement = connection.prepareStatement(sql)) {
             sqlStatement.setString(1, data.getName());
@@ -199,15 +194,14 @@ public class Database {
             connection.commit(); // Commit transaction
             System.out.println("User inserted.");
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Error inserting user: " + e.getMessage());
         }
     }
 
     public void insertDataIntoGames() {
         String[] gameTypes = { "Easy", "Medium", "Hard" };
-        String sql = "INSERT IGNORE INTO Games(gameType) VALUES(?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(SQLiteStatements.INSERT_GAMES_SQLITE_STATEMENT)) {
             for (String gameType : gameTypes) {
                 pstmt.setString(1, gameType);
                 pstmt.addBatch();
@@ -220,12 +214,17 @@ public class Database {
     }
 
     public void insertDataIntoScores(Data data) {
-        String sql = "INSERT INTO Scores(userId, gameId, score, timeStamp) VALUES(?, ?, ?, ?)";
+
+        String sql = getSQLStatement(SQLiteStatements.INSERT_SCORES_SQLITE_STATEMENT,
+                MySQLStatements.INSERT_SCORES_MYSQL_STATEMENT);
+
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, getId(data.getName(), "Users", "username"));
             pstmt.setInt(2, getId(data.getGameType(), "Games", "gameType"));
             pstmt.setInt(3, data.getScore());
-            pstmt.setTimestamp(4, data.getTime());
+            // pstmt.setTimestamp(4, data.getTime());
+            long timeStamp = data.getTime().getTime();
+            pstmt.setLong(4, timeStamp);
             pstmt.executeUpdate();
             connection.commit();
             System.out.println("Score inserted.");
@@ -236,43 +235,69 @@ public class Database {
     }
 
     private int getId(String query, String table, String column) {
-        String sql = "SELECT id FROM " + table + " WHERE " + column + " = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+        String SELECT_ID_SQL_STATEMENT = "SELECT id FROM " + table + " WHERE " + column + " = ?";
+        // System.out.println(SELECT_ID_SQL_STATEMENT);
+        try (PreparedStatement pstmt = connection.prepareStatement(SELECT_ID_SQL_STATEMENT)) {
             pstmt.setString(1, query);
             ResultSet result = pstmt.executeQuery();
             if (result.next()) {
                 return result.getInt("id");
             }
         } catch (SQLException e) {
-            //e.printStackTrace();
+            // e.printStackTrace();
             System.out.println("Error selecting Id from table: " + e.getMessage());
         }
         return -1;
     }
 
-    public ArrayList<Data> selectAllData(int numOfRows) {
-        String sql = "SELECT u.username, g.gameType, s.score, s.timeStamp FROM Scores AS s JOIN Users AS u ON s.userId = u.id JOIN Games AS g ON s.gameId = g.id LIMIT ?";
+    public ArrayList<Data> selectDataFromScores(int numOfRows) {
         ArrayList<Data> dataList = new ArrayList<>();
+        String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_SQLITE_STATEMENT,
+                MySQLStatements.SELECT_DATA_MYSQL_STATEMENT);
+        // System.out.println(sql);
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+            long timeStamp = 0;
             pstmt.setInt(1, numOfRows);
             ResultSet rs = pstmt.executeQuery();
-            connection.commit(); 
+            connection.commit();
 
             while (rs.next()) {
-                Data data = new Data(rs.getString("username"), rs.getString("gameType"), rs.getInt("score"),
-                        rs.getTimestamp("timeStamp").getTime());
-
-                dataList.add(data);
+                try {
+                    String username = rs.getString("username");
+                    String gameType = rs.getString("gameType");
+                    int score = rs.getInt("score");
+                    if (soup) {
+                        timeStamp = rs.getLong("timeStamp"); // Slight difference in how data is stored remotely vs
+                                                             // locally means we need to retrieve data slightly
+                                                             // differently
+                    } else {
+                        timeStamp = rs.getTimestamp("timeStamp").getTime();
+                    }
+                    Data data = new Data(username, gameType, score, timeStamp);
+                    dataList.add(data);
+                } catch (SQLException e) {
+                    System.out.println("Error parsing data row: " + e.getMessage());
+                }
             }
         } catch (SQLException e) {
-          //  e.printStackTrace();
             System.out.println("Error selecting data: " + e.getMessage());
         }
-        for (Data data : dataList) {// TODO: testing to show data in terminal/ remove later
+
+        // TODO: testing to show data in terminal/ remove later
+        for (Data data : dataList) {
             System.out.println(data.getName() + " : " + data.getScore());
         }
+
         return dataList;
     }
 
+    private String getSQLStatement(String SQLite, String MySQL) {
+        if (soup) {
+            return SQLite;
+        } else {
+            return MySQL;
+        }
+    }
 }

@@ -55,6 +55,9 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         toGameMenu(this);
     }
 
+
+    //Different classes will call these methods to change what is shown on the screen
+
     // TODO: add class and method for highscore screen
 
     // TODO: add class and method for end game screen
@@ -65,17 +68,21 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     }
 
     public void toEasyGame(GameGUI flip) {
-        mainPanel.add(new EasyGame(flip, 4, 4));
+        EasyGame eg = new EasyGame(flip, 4, 4);
+        mainPanel.add(eg.getInit());
         updatePanel(mainPanel);
     }
 
     public void toMediumGame(GameGUI flip) {
-        mainPanel.add(new MediumGame(flip, 4, 5), BorderLayout.CENTER);
+        MediumGame mg = new MediumGame(flip, 4, 4);
+
+        mainPanel.add(mg.getInit());
         updatePanel(mainPanel);
     }
 
     public void toHardGame(GameGUI flip) {
-        mainPanel.add(new HardGame(flip, 4, 6), BorderLayout.CENTER);
+        HardGame hg = new HardGame(flip, 4, 4);
+        mainPanel.add(hg.getInit());
         updatePanel(mainPanel);
     }
 
