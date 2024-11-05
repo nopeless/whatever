@@ -1,9 +1,9 @@
 package finalProject.src;
 
 public class CardClickHandler {
-    private Game game;
+    private GameManager game;
 
-    public CardClickHandler(Game game) {
+    public CardClickHandler(GameManager game) {
         this.game = game;
     }
 

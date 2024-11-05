@@ -39,7 +39,7 @@ public class Data {
         return gameType;
     }
 
-    public static String getGameTypeToString(Game game){
+    public static String getGameTypeToString(GameManager game){
         if (game instanceof EasyGame){
             return "Easy";
         }else if (game instanceof MediumGame){
