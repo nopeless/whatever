@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.nio.file.Paths;
 
-public class Database implements SQLiteStatements, MySQLStatements {
+public class Database{
     private Connection connection;
     private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
                                 // false = remote)
@@ -30,7 +30,8 @@ public class Database implements SQLiteStatements, MySQLStatements {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             if (soup) {
-                connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL);
+                connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL.getSql());
+                connection.setAutoCommit(false); // had problems with autoCommit so turned it off
                 if (!doesTablesExist()) {
                     createTables();
                     insertDataIntoGames();
@@ -39,12 +40,13 @@ public class Database implements SQLiteStatements, MySQLStatements {
                 System.out.println("Local database connection established.");
 
             } else {
-                // need to try this twice, wait a sec in between tries
+                // need to try this twice, wait a sec in between tries, do in a seperate thread
                 connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
                         dotenv.get("DB_PASSWORD"));
+                        connection.setAutoCommit(false); // had problems with autoCommit so turned it off
+
                 System.out.println("Remote Database connection established.");
             }
-            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
         } catch (ClassNotFoundException e) {
             System.out.println("JDBC Driver not found.");
         } catch (SQLException e) {
@@ -85,7 +87,7 @@ public class Database implements SQLiteStatements, MySQLStatements {
         String[] tables = { "Users", "Games", "Scores" };
         for (String table : tables) {
             try (PreparedStatement pstmt = connection
-                    .prepareStatement(SQLiteStatements.SELECT_TABLE_FROM_DB_SQLITE_STATEMENT)) {
+                    .prepareStatement(SQLiteStatements.SELECT_TABLE_FROM_DB.getSql())) {
                 pstmt.setString(1, table);
                 ResultSet rs = pstmt.executeQuery();
                 connection.commit();
@@ -172,9 +174,9 @@ public class Database implements SQLiteStatements, MySQLStatements {
     public void createTables() {
 
         try (Statement stmt = connection.createStatement()) {
-            stmt.execute(SQLiteStatements.CREATE_USERS_TABLE_SQLITE_STATEMENT);
-            stmt.execute(SQLiteStatements.CREATE_GAMES_TABLE_SQLITE_STATEMENT);
-            stmt.execute(SQLiteStatements.CREATE_SCORES_TABLE_SQLITE_STATEMENT);
+            stmt.execute(SQLiteStatements.CREATE_USERS_TABLE.getSql());
+            stmt.execute(SQLiteStatements.CREATE_GAMES_TABLE.getSql());
+            stmt.execute(SQLiteStatements.CREATE_SCORES_TABLE.getSql());
             connection.commit(); // Commit transaction
             System.out.println("Tables have been created successfully.");
         } catch (SQLException e) {
@@ -185,8 +187,8 @@ public class Database implements SQLiteStatements, MySQLStatements {
     }
 
     public void insertDataIntoUsers(Data data) {
-        String sql = getSQLStatement(SQLiteStatements.INSERT_USERS_SQLITE_STATEMENT,
-                MySQLStatements.INSERT_USERS_MYSQL_STATEMENT);
+        String sql = getSQLStatement(SQLiteStatements.INSERT_INTO_USERS.getSql(),
+                MySQLStatements.INSERT_INTO_USERS.getSql());
 
         try (PreparedStatement sqlStatement = connection.prepareStatement(sql)) {
             sqlStatement.setString(1, data.getName());
@@ -201,7 +203,7 @@ public class Database implements SQLiteStatements, MySQLStatements {
 
     public void insertDataIntoGames() {
         String[] gameTypes = { "Easy", "Medium", "Hard" };
-        try (PreparedStatement pstmt = connection.prepareStatement(SQLiteStatements.INSERT_GAMES_SQLITE_STATEMENT)) {
+        try (PreparedStatement pstmt = connection.prepareStatement(SQLiteStatements.INSERT_INTO_GAMES.getSql())) {
             for (String gameType : gameTypes) {
                 pstmt.setString(1, gameType);
                 pstmt.addBatch();
@@ -215,8 +217,8 @@ public class Database implements SQLiteStatements, MySQLStatements {
 
     public void insertDataIntoScores(Data data) {
 
-        String sql = getSQLStatement(SQLiteStatements.INSERT_SCORES_SQLITE_STATEMENT,
-                MySQLStatements.INSERT_SCORES_MYSQL_STATEMENT);
+        String sql = getSQLStatement(SQLiteStatements.INSERT_INTO_SCORES.getSql(),
+                MySQLStatements.INSERT_INTO_SCORES.getSql());
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setInt(1, getId(data.getName(), "Users", "username"));
@@ -253,8 +255,8 @@ public class Database implements SQLiteStatements, MySQLStatements {
 
     public ArrayList<Data> selectDataFromScores(int numOfRows) {
         ArrayList<Data> dataList = new ArrayList<>();
-        String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_SQLITE_STATEMENT,
-                MySQLStatements.SELECT_DATA_MYSQL_STATEMENT);
+        String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_FROM_SCORES.getSql(),
+                MySQLStatements.SELECT_DATA_FROM_SCORES.getSql());
         // System.out.println(sql);
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
