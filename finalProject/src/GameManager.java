@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
-public abstract class GameManager{
+public abstract class GameManager {
     protected GameGUI flip;
     protected int score; // TODO: score is unimplemented for now, can maybe make score based on gameType,
                          // like
@@ -25,14 +25,12 @@ public abstract class GameManager{
         this.flip = flip;
         this.delay = delay;
         init = new GameInitialization(title, flip, rows, columns, this);
-        // saveData();// TODO: remove later, should go in HighScores class when created
+        saveData();// TODO: remove later, should go in HighScores class when created
     }
 
-    public GameInitialization getInit(){
+    public GameInitialization getInit() {
         return init;
     }
-
-    
 
     // this method turns 2 selected cards face down after a set time 'delay'
     // this is so that when 2 non matching cards are selected there is a short delay
@@ -40,8 +38,7 @@ public abstract class GameManager{
     // face down
     protected void waitIfNoMatch(Card card1, Card card2) {
         disableAllCards(card1, card2);
-        Timer timer = new Timer(delay, new ActionListener() {// had to look up some information about Timers and how to
-                                                             // add actionListener to them
+        Timer timer = new Timer(delay, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 card1.setFaceUp(false);
@@ -53,7 +50,7 @@ public abstract class GameManager{
         timer.start();
     }
 
-    //Has to be a better way to do this
+    // Has to be a better way to do this
     protected void disableAllCards(Card card1, Card card2) {
         for (Component card : init.getBoardArrayList()) {
             Card cardy = (Card) card;
@@ -66,7 +63,7 @@ public abstract class GameManager{
         }
     }
 
-        //Has to be a better way to do this
+    // Has to be a better way to do this
     protected void enableAllCardsNotMatched() {
         for (Component card : init.getBoardArrayList()) {
             Card cardy = (Card) card;
@@ -77,13 +74,10 @@ public abstract class GameManager{
         }
     }
 
-    protected void isGameOver() {
-        if (getNumOfFaceUpCards() == 16) {
-            flip.clearPanel(); 
-            flip.toGameMenu(flip); //temp way to just send you back to difficulty selection menu
-            // TODO: send to end game sceen(that shows score, asks if you want to upload
-            // TODO: score), which will then send you back to menu, after you click 'ok'
-        }
+    abstract void isGameOver();
+
+    public void sendToEndGameScreen(){
+        
     }
 
     public int getScore() {
@@ -96,15 +90,15 @@ public abstract class GameManager{
 
     // this method will create a new Data Obj, TODO: is more appropiate for
     // TODO: this method to go in HighScores, or another class
-    // protected void saveData() {
-    // Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");// testing
-    // data/database obj
-    // Database db = new Database();
-    // db.insertDataIntoUsers(data);
-    // db.insertDataIntoScores(data);
-    // // db.printAllData();
-    // db.selectAllData(10);
-    // }
+    protected void saveData() {
+        Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");// testing
+        // data database obj
+        Database db = new Database();
+        db.insertDataIntoUsers(data);
+        db.insertDataIntoScores(data);
+        // db.printAllData();
+        db.selectDataFromScores(10);
+    }
 
     public int getNumOfFaceUpCards() {
         return numOfFaceUpCards;
@@ -146,5 +140,41 @@ public abstract class GameManager{
         getClickedCard().setCardMatched();
         card.setCardMatched();
     }
-    
+
+    public class CardClickHandler {
+
+        public void handleCardClick(Card card) {
+            card.setFaceUp(true);
+            if (isFirstCardClick()) {
+                handleFirstCardClick(card);
+            } else {
+                handleSecondCardClick(card);
+            }
+            incrementActionPerformedCounter();
+        }
+
+        private boolean isFirstCardClick() {
+            return getActionPerformedCounter() % 2 == 0;
+        }
+
+        private void handleFirstCardClick(Card card) {
+            setClickedCard(card);
+            setClickedIcon(card.getIcony());
+        }
+
+        private void handleSecondCardClick(Card card) {
+            if (isMatch(card)) {
+                markCardsAsMatched(card);
+                isGameOver();
+            } else {
+                waitIfNoMatch(getClickedCard(), card);
+            }
+        }
+
+        private boolean isMatch(Card card) {
+            return getClickedIcon().equals(card.getIcony());
+        }
+
+    }
+
 }

@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 
 public class Card extends JButton implements ActionListener {
     private boolean isFaceUp;
-    private ImageIcon icony;
-    private ImageIcon backIcon = null;
+    private ImageIcon icony;//rename later
+    private ImageIcon backIcon = null;//rename later
     private GameManager game;
 
     public Card(String imagePath, GameManager game) {
@@ -23,7 +23,9 @@ public class Card extends JButton implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        CardClickHandler click = new CardClickHandler(game);
+        //CardClickHandler1 click = new CardClickHandler1(game);
+        //click.handleCardClick(this);
+        GameManager.CardClickHandler click = game.new CardClickHandler();
         click.handleCardClick(this);
     }
 

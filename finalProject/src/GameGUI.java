@@ -1,6 +1,5 @@
 package finalProject.src;
 
-import java.awt.*;
 import javax.swing.*;
 //to run this code you need the sql driver, either reference it in your ide or run the code via the terminal with the following lines while in the parent dir of finalProject (i.e you should be in dir 'C:Users/USERNAME/project' and the 'project' dir should contain 'finalProject'):
 //will need to update when more .java files are added to the project
@@ -83,6 +82,10 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     public void toHardGame(GameGUI flip) {
         HardGame hg = new HardGame(flip, 4, 4);
         mainPanel.add(hg.getInit());
+        updatePanel(mainPanel);
+    }
+    public void toEndGame(GameGUI flip) {
+        mainPanel.add(new EndGame(flip));
         updatePanel(mainPanel);
     }
 

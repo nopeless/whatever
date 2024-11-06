@@ -15,6 +15,6 @@ public class MediumGame extends GameManager{
             // TODO: score), which will then send you back to menu, after you click 'ok'
         }
     }
-  
+
     
 }
