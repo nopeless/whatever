@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import java.util.Collections;
 
 public class GameInitialization extends JPanel {
-    protected GameGUI flip;
+    private GameGUI flip;//don't really need this as of now
     private GameManager game;
     private int rows;
     private int columns;
@@ -25,14 +25,16 @@ public class GameInitialization extends JPanel {
         initializeBoardPanel();
         initializeBoardWithCards();
     }
+    
     public GameManager getGame(){
         return game;
     }
+    
     public ArrayList<Component> getBoardArrayList(){
         return boardArrayList;
     }
 
-    // this sets up some basic info for the board
+    // sets up some basic info for the board
     public void initializeBoardPanel() {
         setLayout(new GridLayout(rows, columns));
         setLocation((GameGUI.DEFAULT_WIDTH / 2), (GameGUI.DEFAULT_HEIGHT));
@@ -42,7 +44,7 @@ public class GameInitialization extends JPanel {
         repaint();
     }
 
-    // shuffles the cards and adds them to panel
+    // shuffles the ArrayList of cards and adds them to panel
     public void initializeBoardWithCards() {
         createAndAddCardsToArrayList();
         Collections.shuffle(boardArrayList);

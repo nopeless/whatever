@@ -2,18 +2,18 @@ import java.util.Scanner;
 
 public class Driver {
 
-    private static Scanner scanner = new Scanner(System.in);
+    private static Scanner scanner = new Scanner(System.in); 
 
     public static void main(String[] args) {
         String text = "";
         String message = "";
         int senderUID = 0;
-        int receiverUID = 0;
 
         // hard coded person and website objects to test with
         Website website = new Website();
         new Person("luke", "monroe", website);
         new Person("bruce", "wayne", website);
+        
 
         do {
             System.out.println("Type 'quit' to exit, anything else to keep going:");
@@ -25,12 +25,11 @@ public class Driver {
 
             System.out.println("Enter the sender's UID, or -1 to view chat history, or -2 to create a new Person:");
             if (scanner.hasNextInt()) {
-                senderUID = scanner.nextInt();
+                senderUID = scanner.nextInt();//should have just done scanner.nextLine() to clear buffer right after this, but i dont wanna rewrite stuff
                 if (senderUID == -1) {
-                    // get chat history
                     System.out.println(getMessages(scanner, website));
                     scanner.nextLine();
-                } else if (senderUID == -2) { // receives input and creates Person Obj
+                } else if (senderUID == -2) { 
                     createPerson(scanner, website);
                 } else { 
                     if (website.isPersonInWebsite(senderUID)) {
@@ -77,9 +76,8 @@ public class Driver {
 
     private static void createPerson(Scanner scanner, Website website) {
         System.out.println("What is the first name of the person: ");
-        scanner.nextLine(); // consume the leftover newline
+        scanner.nextLine(); 
         String firstName = scanner.nextLine();
-
         System.out.println("What is the last name of the person: ");
         String lastName = scanner.nextLine();
 
@@ -97,7 +95,7 @@ public class Driver {
             scanner.nextLine();
         } else if (website.isPersonInWebsite(receiverUID)) {
             System.out.println("Enter the message text being sent:");
-            scanner.nextLine(); // consume the leftover newline (clear buffer)
+            scanner.nextLine(); 
             message = scanner.nextLine();
             if (Person.sendMessageTo(senderUID, receiverUID, message, website)) {
                 System.out.println("Message successfully sent.");
@@ -108,33 +106,6 @@ public class Driver {
             System.out.println("Person with that UID not found.");
             scanner.nextLine();
 
-        }
-    }
-
-    private static int handleUserInputForSenderUID(Scanner scanner, Website website, String message) {
-        System.out.println("Enter the sender's UID, or -1 to view chat history, or -2 to create a new Person:");
-        if (scanner.hasNextInt()) {
-            int senderUID = scanner.nextInt();
-            if (senderUID == -1) {
-                // get chat history
-                System.out.println(getMessages(scanner, website));
-                scanner.nextLine();
-            } else if (senderUID == -2) { // receives input and creates Person Obj
-                createPerson(scanner, website);
-            } else { // if number is entered checks if that UID belongs to a person and if it does
-                     // then lets the person enter a receiver UID
-                if (website.isPersonInWebsite(senderUID)) {
-                    handleUserInputForReceiverUID(scanner, website, message, senderUID);
-                } else {
-                    System.out.println("Person with that UID not found : ");
-                    scanner.nextLine();
-                }
-            }
-            return senderUID;
-        } else {
-            System.out.println("Please enter a number.");
-            scanner.nextLine();
-            return -1;
         }
     }
 

@@ -5,20 +5,21 @@ import javax.swing.*;
 import java.awt.Image;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.io.File;
 
 //helper class to preload and retrieve images so the game runs without freezing
 public class ImageCache {
     
     // Hashmap, basically like a python dictionary. Its key, value pair and is
     // really fast
-    private static HashMap<String, ImageIcon> imageCache = new HashMap<>();
-    private static ArrayList<String> imagePathArray;
+    private static HashMap<File, ImageIcon> imageCache = new HashMap<>();
+    private static ArrayList<File> imagePathArray;
 
     // this method retrieves an image from the cache or loads it if not present
-    public static ImageIcon getImage(String imagePath) {
+    public static ImageIcon getImage(File imagePath) {
         // Check if the image is already cached
         if (!imageCache.containsKey(imagePath)) {// this shouldn't be needed but just in case
-            ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(imagePath));
+            ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(imagePath.toString()));
             imageCache.put(imagePath, imageIcon);
         }
         return imageCache.get(imagePath);
@@ -29,11 +30,10 @@ public class ImageCache {
     public static void preloadImages() {
         addFileNamesToArrayList();
         ImageIcon resizedImageIcon = null;
-        for (String path : imagePathArray) {
+        for (File path : imagePathArray) {
             if (!imageCache.containsKey(path)) {// if imagePath does not already exist in the hashmap
-                ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path));// turn the png FilePath into an
-                                                                                        // ImageIcon Obj
-                if (path.equals("..\\CardSprites\\star.png")) {
+                ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path.toString()));// turn the png FilePath into an                                                                   // ImageIcon Obj
+                if (path.equals(new File("..\\CardSprites\\star.png"))) {
                     resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);
                     imageCache.put(path, resizedImageIcon);
                 } else {
@@ -53,20 +53,20 @@ public class ImageCache {
 
     private static void addFileNamesToArrayList() {
         imagePathArray = new ArrayList<>();
-        imagePathArray.add("..\\CardSprites\\star.png");
-        imagePathArray.add("..\\CardSprites\\apple.jpg");
-        imagePathArray.add("..\\CardSprites\\duck.jpg");
-        imagePathArray.add("..\\CardSprites\\frog.png");
-        imagePathArray.add("..\\CardSprites\\heart.jpg");
-        imagePathArray.add("..\\CardSprites\\musicNote.png");
-        imagePathArray.add("..\\CardSprites\\smiley.png");
-        imagePathArray.add("..\\CardSprites\\turtle.jpg");
-        imagePathArray.add("..\\CardSprites\\back.jpg");
+        imagePathArray.add(new File("..\\CardSprites\\star.png"));
+        imagePathArray.add(new File("..\\CardSprites\\apple.jpg"));
+        imagePathArray.add(new File("..\\CardSprites\\duck.jpg"));
+        imagePathArray.add(new File("..\\CardSprites\\frog.png"));
+        imagePathArray.add(new File("..\\CardSprites\\heart.jpg"));
+        imagePathArray.add(new File("..\\CardSprites\\musicNote.png"));
+        imagePathArray.add(new File("..\\CardSprites\\smiley.png"));
+        imagePathArray.add(new File("..\\CardSprites\\turtle.jpg"));
+        imagePathArray.add(new File("..\\CardSprites\\back.jpg"));
 
     }
 
     // returns fileName of a sprite at specified index
-    public static String getImagePathArrayElement(int index) {
+    public static File getImagePathArrayElement(int index) {
         return imagePathArray.get(index);
     }
 

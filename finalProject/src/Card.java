@@ -1,7 +1,7 @@
 package finalProject.src;
 
 import javax.swing.*;
-
+import java.io.File;
 
 //note: don't need to implement actionListener bc Java knows to use the ActionListener functional interface because of the context in which the lambda expression is used.
 public class Card extends JButton {
@@ -10,7 +10,7 @@ public class Card extends JButton {
     private ImageIcon backIcon = null;//rename later
     private GameManager game;
 
-    public Card(String imagePath, GameManager game) {
+    public Card(File imagePath, GameManager game) {
         this.game = game;
         icony = ImageCache.getImage(imagePath);
         backIcon = ImageCache.getImage(ImageCache.getImagePathArrayElement(8)); 
@@ -26,8 +26,7 @@ public class Card extends JButton {
     // public void actionPerformed(ActionEvent e) {
     //     //CardClickHandler1 click = new CardClickHandler1(game);
     //     //click.handleCardClick(this);
-    //     GameManager.CardClickHandler click = game.new CardClickHandler();
-    //     click.handleCardClick(this);
+    //     game.new CardClickHandler(this);
     // }
 
     public void setFaceUp(boolean isFaceUp) {
