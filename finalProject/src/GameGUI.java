@@ -31,12 +31,18 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         // helping create multiple GameGUI's if you want to multithread this
         // application, however rn it is basically just creates a new GameGUI object
         // which kickstarts the rest of the code
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new GameGUI();
-            }
-        });
+
+        
+        // SwingUtilities.invokeLater(new Runnable() {
+        //     @Override
+        //     public void run() {
+        //         new GameGUI();
+        //     }
+        // });
+
+       SwingUtilities.invokeLater(() -> new GameGUI());
+            
+        
     }
 
     // initializes the frame and adds a blank panel

@@ -1,10 +1,10 @@
 package finalProject.src;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Card extends JButton implements ActionListener {
+
+//note: don't need to implement actionListener bc Java knows to use the ActionListener functional interface because of the context in which the lambda expression is used.
+public class Card extends JButton {
     private boolean isFaceUp;
     private ImageIcon icony;//rename later
     private ImageIcon backIcon = null;//rename later
@@ -18,16 +18,17 @@ public class Card extends JButton implements ActionListener {
         setIcon(backIcon);
         //setDisabledSelectedIcon(backIcon);
         setDisabledIcon(icony);
-        addActionListener(this);
+        //addActionListener(this);
+        addActionListener(e -> game.new CardClickHandler(this));
         }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        //CardClickHandler1 click = new CardClickHandler1(game);
-        //click.handleCardClick(this);
-        GameManager.CardClickHandler click = game.new CardClickHandler();
-        click.handleCardClick(this);
-    }
+    //replaced this code with the above lambda expression, lambdas are neat.
+    // @Override
+    // public void actionPerformed(ActionEvent e) {
+    //     //CardClickHandler1 click = new CardClickHandler1(game);
+    //     //click.handleCardClick(this);
+    //     GameManager.CardClickHandler click = game.new CardClickHandler();
+    //     click.handleCardClick(this);
+    // }
 
     public void setFaceUp(boolean isFaceUp) {
         this.isFaceUp = isFaceUp;

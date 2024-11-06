@@ -76,8 +76,15 @@ public abstract class GameManager {
 
     abstract void isGameOver();
 
+    //just a different way of checking if game is over, idk if we should use this or the abstract method
+    public void gameOver(){
+        if(init.getBoardArrayList().size() == getNumOfFaceUpCards()){
+            System.out.println("Game Over");
+        }
+    }
+
     public void sendToEndGameScreen(){
-        
+        //TODO
     }
 
     public int getScore() {
@@ -142,6 +149,9 @@ public abstract class GameManager {
     }
 
     public class CardClickHandler {
+        public CardClickHandler(Card card){
+            handleCardClick(card);
+        }
 
         public void handleCardClick(Card card) {
             card.setFaceUp(true);
@@ -166,6 +176,7 @@ public abstract class GameManager {
             if (isMatch(card)) {
                 markCardsAsMatched(card);
                 isGameOver();
+                gameOver();
             } else {
                 waitIfNoMatch(getClickedCard(), card);
             }
