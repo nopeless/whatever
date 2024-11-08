@@ -256,7 +256,7 @@ public class Database{
     public ArrayList<Data> selectDataFromScores(int numOfRows) {
         ArrayList<Data> dataList = new ArrayList<>();
         String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_FROM_SCORES.getSql(),
-                MySQLStatements.SELECT_DATA_FROM_SCORES.getSql());
+                MySQLStatements.SELECT_DATA_FROM_SCORES.getSql() );
         // System.out.println(sql);
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
