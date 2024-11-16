@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import java.util.Collections;
 
-public class GameInitialization extends JPanel {
+public class GameBoardInitialization extends JPanel {
     private GameGUI flip;//don't really need this as of now
     private GameManager game;
     private int rows;
@@ -14,14 +14,13 @@ public class GameInitialization extends JPanel {
 
 
 
-    public GameInitialization(String title, GameGUI flip, int rows, int columns, GameManager game) {
+    public GameBoardInitialization(String title, GameGUI flip, int rows, int columns, GameManager game) {
         this.flip = flip;
         this.rows = rows;
         this.columns = columns;
         boardArrayList = new ArrayList<>();
         this.game = game;
         flip.setTitle(title);
-
         initializeBoardPanel();
         initializeBoardWithCards();
     }
@@ -30,10 +29,17 @@ public class GameInitialization extends JPanel {
         return game;
     }
     
+    public void setGame(GameManager game){
+        this.game = game;
+    }
+    
     public ArrayList<Component> getBoardArrayList(){
         return boardArrayList;
     }
 
+    public void setBoardArrayList(ArrayList<Component> listOfButtons){
+        boardArrayList = listOfButtons;
+    }
     // sets up some basic info for the board
     public void initializeBoardPanel() {
         setLayout(new GridLayout(rows, columns));
@@ -47,6 +53,10 @@ public class GameInitialization extends JPanel {
     // shuffles the ArrayList of cards and adds them to panel
     public void initializeBoardWithCards() {
         createAndAddCardsToArrayList();
+        shuffleCards();
+    }
+
+    private void shuffleCards(){
         Collections.shuffle(boardArrayList);
         for (Component card : boardArrayList) {
             add(card);
@@ -57,21 +67,25 @@ public class GameInitialization extends JPanel {
     public void createAndAddCardsToArrayList() {
         // TODO: this method leads to an error when creating hard or medium game because
         // there are not enough sprite files
-        int counter = 0;
-        int IconIndex = 0;
-        for (int index = 0; index < rows; index++) {
-            for (int index2 = 0; index2 < columns; index2++) {
-                if (counter % 2 == 0) {
-                    // there are two Cards being created here so that there can be two cards with
-                    // the same picture
-                    //System.out.println(game + "hehe");
-                    boardArrayList.add(new Card(ImageCache.getImagePathArrayElement(IconIndex), game));
-                    boardArrayList.add(new Card(ImageCache.getImagePathArrayElement(IconIndex), game));
-                    IconIndex++;
+        //int counter = 0;
+        int iconIndex = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (j % 2 == 0) {//might break if rows or columns is odd instead of even. especially columns
+                    createSetOfCards(iconIndex);
+                    iconIndex++;
                 }
-                counter++;
+                //counter++;
             }
 
         }
+    }
+
+    public void createSetOfCards(int index){
+        // there are two Cards being created here so that there can be two cards with
+        // the same picture
+        boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
+        boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
+        //System.out.println(ImageCache.getImageFile(index));
     }
 }
