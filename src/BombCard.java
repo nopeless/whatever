@@ -5,7 +5,7 @@ import java.io.File;
 //also i dont have a bomb card image rn, 
 public class BombCard extends Card{
     private static File imagePathFile = ImageCache.getImageFile("bomb", "jpg");
-
+    
     public BombCard(GameManager game){
         super(imagePathFile, game);
         addActionListener(e -> game.new CardClickHandler(this));

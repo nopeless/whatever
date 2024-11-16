@@ -1,12 +1,6 @@
 package finalProject.src;
 
 import javax.swing.*;
-//to run this code you need the sql driver, either reference it in your ide or run the code via the terminal with the following lines while in the parent dir of finalProject (i.e you should be in dir 'C:Users/USERNAME/project' and the 'project' dir should contain 'finalProject'):
-//will need to update when more .java files are added to the project
-//javac -cp "finalProject/lib/*" -d finalProject/bin finalProject/src/*.java     compiles code
-//java -cp ".;finalProject/bin;finalProject/lib/*" finalProject.src.GameGUI        runs code
-
-
 
 //TODO: right now in many of the classes I have just set the fields and methods to protected,
 //TODO: but many of these should be changed to private or public as needed. 
@@ -30,10 +24,6 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     }
 
     public static void main(String[] args) {
-        // this way of starting the game is somewhat unnecessary as it is more for
-        // helping create multiple GameGUI's if you want to multithread this
-        // application, however rn it is basically just creates a new GameGUI object
-        // which kickstarts the rest of the code
 
         
         // SwingUtilities.invokeLater(new Runnable() {
@@ -43,6 +33,9 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         //     }
         // });
 
+        //starts code by creating new GameGUI obj
+        //this code is exactly the same as the above commented out code
+        //this line just uses a lambda in place of the anonymous class
        SwingUtilities.invokeLater(() -> new GameGUI());
             
         
@@ -84,7 +77,6 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     public void toMediumGame(GameGUI flip) {
         MediumGame mg = new MediumGame(flip, 4, 4);
-
         mainPanel.add(mg.getInit());
         updatePanel(mainPanel);
     }

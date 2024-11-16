@@ -75,9 +75,8 @@ public class ImageCache {
     }
 
     public static File getImageFile(String name, String fileType) {//TODO: this is not working : need to probab
-        //change name into File
         String targetFilePath = String.format("..\\Resources\\%s.%s", name, fileType);
-        System.out.println(targetFilePath);
+        //System.out.println(targetFilePath);
         return new File(targetFilePath);
         //return getImageIcon(new File(targetFilePath));
     }

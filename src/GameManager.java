@@ -6,14 +6,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 
-public abstract class GameManager {
+public abstract class GameManager {// doesnt really need to be abstract as of now because isGameOver can be taken
+                                   // care of exclusively in this class
     protected GameGUI flip;
     protected Score score; // TODO: score is unimplemented for now, can maybe make score based on gameType,
-                         // like
-                         // TODO: you get more points per card match in HardGame than in EasyGame
-                         // TODO: and make it so you get more points if you take less time to finish the
-                         // TODO: game, and also more points for the less amount of card flips it takes
-                         // TODO: you to finish the game.
+                           // like
+                           // TODO: you get more points per card match in HardGame than in EasyGame
+                           // TODO: and make it so you get more points if you take less time to finish the
+                           // TODO: game, and also more points for the less amount of card flips it takes
+                           // TODO: you to finish the game.
     private int delay;
     private int numOfFaceUpCards;
     private Card clickedCard;
@@ -25,11 +26,17 @@ public abstract class GameManager {
         this.flip = flip;
         this.delay = delay;
         init = new GameBoardInitialization(title, flip, rows, columns, this);
-        //saveData();// TODO: remove later, should go in HighScores class when created
+        startTrackingScore(this);
+        // saveData();// TODO: remove later, should go in HighScores class when created
     }
 
     public GameBoardInitialization getInit() {
         return init;
+    }
+
+    public void startTrackingScore(GameManager game) {
+        score = new Score(game);
+        score.startGame();
     }
 
     // this method turns 2 selected cards face down after a set time 'delay'
@@ -74,21 +81,29 @@ public abstract class GameManager {
         }
     }
 
-    abstract void isGameOver();
+    public void isGameOver() {
+        System.out.println("Gammeee over");
+        System.out.println(getNumOfFaceUpCards());
+        System.out.println(init.getBoardArrayList().size());
 
-    //just a different way of checking if game is over, idk if we should use this or the abstract method
-    public void gameOver(){
-        // if(init.getBoardArrayList().size() == getNumOfFaceUpCards()){
-        //     System.out.println("Game Over");
-        // }
-        //TODO: send to endGame screen
-        cleanup();
-        flip.clearPanel(); 
-        flip.toGameMenu(flip);
+        if (getNumOfFaceUpCards() == init.getBoardArrayList().size()) {
+            gameOver();
+            System.out.println("Gammeee over");
+        }
     }
 
-    public void sendToEndGameScreen(){
-        //TODO
+    // just a different way of checking if game is over, idk if we should use this
+    // or the abstract method
+    public void gameOver() {
+        // if(init.getBoardArrayList().size() == getNumOfFaceUpCards()){
+        // System.out.println("Game Over");
+        // }
+        // TODO: send to endGame screen
+        score.endGame();//score is null
+        score.doMathForScore();
+        cleanup();
+        flip.clearPanel();
+        flip.toEndGame(flip);
     }
 
     public void cleanup() {
@@ -151,10 +166,10 @@ public abstract class GameManager {
         card.setCardMatched();
     }
 
-    public class CardClickHandler {
-        public CardClickHandler(Card card){
+    class CardClickHandler {
+        public CardClickHandler(Card card) {
             handleCardClick(card);
-         }
+        }
 
         public void handleCardClick(Card card) {
             card.setFaceUp(true);
@@ -162,15 +177,6 @@ public abstract class GameManager {
                 handleFirstCardClick(card);
             } else {
                 handleSecondCardClick(card);
-            }
-            incrementActionPerformedCounter();
-        }
-        public void handleCardClick(BombCard bombCard) {
-            bombCard.setFaceUp(true);
-            if (isFirstCardClick()) {
-                handleFirstCardClick(bombCard);
-            } else {
-                handleSecondCardClick(bombCard);
             }
             incrementActionPerformedCounter();
         }
@@ -186,18 +192,17 @@ public abstract class GameManager {
 
         private void handleSecondCardClick(Card card) {
             if (isMatch(card)) {
-                if(card instanceof BombCard){
+                if (card instanceof BombCard) {
                     gameOver();
                     return;
                 }
                 markCardsAsMatched(card);
                 isGameOver();
-                //gameOver();
+                // gameOver();
             } else {
                 waitIfNoMatch(getClickedCard(), card);
             }
         }
-
 
         private boolean isMatch(Card card) {
             return getClickedIcon().equals(card.getIcony());

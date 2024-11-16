@@ -86,6 +86,6 @@ public class GameBoardInitialization extends JPanel {
         // the same picture
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
-        System.out.println(ImageCache.getImageFile(index));
+        //System.out.println(ImageCache.getImageFile(index));
     }
 }
