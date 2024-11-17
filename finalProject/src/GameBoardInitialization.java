@@ -53,6 +53,12 @@ public class GameBoardInitialization extends JPanel {
     // shuffles the ArrayList of cards and adds them to panel
     public void initializeBoardWithCards() {
         createAndAddCardsToArrayList();
+    if (game instanceof MediumGame){
+        addBombCards();
+    }else if (game instanceof HardGame){
+        addBombCards();
+        //addDecoyCards(); TODO: make this method
+    }
         shuffleCards();
     }
 
@@ -87,5 +93,9 @@ public class GameBoardInitialization extends JPanel {
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
         //System.out.println(ImageCache.getImageFile(index));
+    }
+    public void addBombCards(){
+        boardArrayList.add(new BombCard(game));
+        boardArrayList.add(new BombCard(game));
     }
 }
