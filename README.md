@@ -9,23 +9,40 @@ The game will offer three difficulty levels: easy, medium, and hard. In the easy
 
 ## Installation
 
+Go to https://github.com/ST3ALTHY-0/CIT270FinalProject.com and copy or download the code.
+Or in the terminal clone the repo 'https://github.com/ST3ALTHY-0/CIT270FinalProject.git'.
+
 ```bash
 ## Example command
 git clone https://github.com/ST3ALTHY-0/CIT270FinalProject.git
-cd CIT270FinalProject
+
 ```
 
 
 ## How to Compile and Run
- You need to be in parent directory of finalProject to run the code correctly because some of the code relies on relative paths
+ You must be in the parent directory of 'finalProject' to run the code.
 
 ```bash
+### Move to the parent directory of 'finalProject'.
+cd CIT270FinalProject
+
 ### Compile
 javac -cp "finalProject/lib/*" -d finalProject/bin finalProject/src/*.java
 
 ### Run
 java -cp ".;finalProject/bin;finalProject/lib/*" finalProject.src.GameGUI
 ```
+## Program description
+TODO:
+
+## Class Description
+TODO: Give a higher-level explanation of what each class does
+
+
+## Class Breakdown
+TODO: explain what each of the functions inside each class do
+
+
 
 ## Project authors
 Luke Monroe, Jerin Gamagama, Cody CyberBatMan
