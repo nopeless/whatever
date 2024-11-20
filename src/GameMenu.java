@@ -10,9 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -33,16 +30,17 @@ public class GameMenu extends JPanel {
 
     public GameMenu(GameGUI flip) {
         this.flip = flip;
+
         backgroundIcon = ImageCache.getImageIcon(ImageCache.getImageFile("Other", "trees", "jpg"));
         backgroundImage = backgroundIcon.getImage();
-        initializeGameMenuPanel();
 
+        initializeGameMenuPanel();
         initButtons();
         buttonBox = new ButtonBox();
         intro = new IntroScreen();
-        toInfoPanel();
         intro.initializeIntroScreen();
         buttonBox.initializeButtonBox();
+
         toInfoPanel();
     }
 
@@ -80,7 +78,6 @@ public class GameMenu extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10); // Optional: Add padding
     }
 
-
     protected void initButtons() {
         easyButton = new JButton("Easy");
         mediumButton = new JButton("Medium");
@@ -94,8 +91,7 @@ public class GameMenu extends JPanel {
         mediumButton.setBackground(Color.YELLOW);
         hardButton.setBackground(Color.RED);
     }
-
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -103,7 +99,6 @@ public class GameMenu extends JPanel {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
-
 
     class ButtonBox extends JPanel {
 

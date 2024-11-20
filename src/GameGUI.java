@@ -1,30 +1,16 @@
 package src;
 
-import java.awt.Color;
-import java.awt.Dimension;
-
 import javax.swing.*;
-
-//TODO: right now in many of the classes I have just set the fields and methods to protected,
-//TODO: but many of these should be changed to private or public as needed. 
-
-//TODO: I also like the idea of making a highscore board, can maybe get practice implimenting an API that keeps track
-//TODO: of all the scores gotten by anyone who has played the game and maybe display like the top 10 somewhere in the game : edit this has mostly been done at least locally
-
-//TODO: Add some sounds, when you flip over matching pair, non matching pair, you finish the game, etc
-
 public class GameGUI extends JFrame {// could make it not extend JFrame by declaring and initializing a JFrame in the
                                      // initializeFrame method
     protected static final int DEFAULT_WIDTH = 800;
     protected static final int DEFAULT_HEIGHT = 800;
     protected GameMenu gameMenu;
     protected JPanel mainPanel;
-   // private IntroScreen introScreen;
-    private JLayeredPane layeredPane;
+
 
     public GameGUI() {
         ImageCache.preloadImages();
-      // new Thread(() -> initializeFrame()).start();
         initializeFrame();
     }
 
@@ -45,7 +31,6 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     // initializes the frame and adds a blank panel
     public void initializeFrame() {
-        //System.out.println("Running in thread: " + Thread.currentThread().getName());
         // create panel
         mainPanel = new JPanel();
         add(mainPanel);
@@ -59,17 +44,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         toGameMenu(this);
     }
 
-
-    //Different classes will call these methods to change what is shown on the screen
-
     // TODO: add class and method for highscore screen
-
-    // TODO: add class and method for end game screen
-
-    // public void showGameMenu() {
-    //     introScreen.setVisible(false);
-    //     gameMenu.setVisible(true);
-    // }
 
     public void toGameMenu(GameGUI flip) {
         mainPanel.add(new GameMenu(flip));
