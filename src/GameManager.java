@@ -5,6 +5,7 @@ import javax.swing.Icon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
+import java.util.Stack;
 
 public abstract class GameManager {// doesnt really need to be abstract as of now because isGameOver can be taken
                                    // care of exclusively in this class
@@ -17,14 +18,14 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
                            // TODO: you to finish the game.
     private int delay;
     private int numOfFaceUpCards;
-    private Card clickedCard;
-    private Icon clickedIcon;
     private int actionPerformedCounter;
     private GameBoardInitialization init;
+    private Stack<Card> cardStack;
 
     public GameManager(String title, GameGUI flip, int rows, int columns, int delay) {
         this.flip = flip;
         this.delay = delay;
+        cardStack = new Stack<>();
         init = new GameBoardInitialization(title, flip, rows, columns, this);
         startTrackingScore(this);
         // saveData();// TODO: remove later, should go in HighScores class when created
@@ -82,11 +83,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     }
 
     public void isGameOver() {
-        System.out.println("Gammeee over");
-        System.out.println(getNumOfFaceUpCards());
-        System.out.println(init.getBoardArrayList().size());
-
-        if (getNumOfFaceUpCards() == init.getBoardArrayList().size()) {
+        if (cardStack.size() == (init.getBoardArrayList().size() / 2)) {
             gameOver();
             System.out.println("Gammeee over");
         }
@@ -95,22 +92,10 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     // just a different way of checking if game is over, idk if we should use this
     // or the abstract method
     public void gameOver() {
-        // if(init.getBoardArrayList().size() == getNumOfFaceUpCards()){
-        // System.out.println("Game Over");
-        // }
-        // TODO: send to endGame screen
-        score.endGame();//score is null
+        score.endGame();
         score.doMathForScore();
-        cleanup();
         flip.clearPanel();
         flip.toEndGame(flip);
-    }
-
-    public void cleanup() {
-
-        init = null;
-        clickedCard = null;
-        clickedIcon = null;
     }
 
     // this method will create a new Data Obj, TODO: is more appropiate for
@@ -133,22 +118,6 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         this.numOfFaceUpCards = numOfFaceUpCards;
     }
 
-    public Card getClickedCard() {
-        return clickedCard;
-    }
-
-    public void setClickedCard(Card card) {
-        clickedCard = card;
-    }
-
-    public Icon getClickedIcon() {
-        return clickedIcon;
-    }
-
-    public void setClickedIcon(Icon icon) {
-        clickedIcon = icon;
-    }
-
     public int getActionPerformedCounter() {
         return actionPerformedCounter;
     }
@@ -162,7 +131,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     }
 
     protected void markCardsAsMatched(Card card) {
-        getClickedCard().setCardMatched();
+        cardStack.peek().setCardMatched();
         card.setCardMatched();
     }
 
@@ -174,14 +143,12 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         public void handleCardClick(Card card) {
             card.setFaceUp(true);
             if (isFirstCardClick()) {
-                System.out.println("handle first  click");
                 handleFirstCardClick(card);
             } else {
-                System.out.println("handle second  click");
-
                 handleSecondCardClick(card);
             }
             incrementActionPerformedCounter();
+            System.out.println(getActionPerformedCounter() + "\n");
         }
 
         private boolean isFirstCardClick() {
@@ -189,35 +156,29 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         }
 
         private void handleFirstCardClick(Card card) {
-            setClickedCard(card);
-            System.out.println(card.toString());
-            setClickedIcon(card.getIcony());
+            cardStack.push(card);
         }
 
         private void handleSecondCardClick(Card card) {
-            System.out.println("Checking if card is a match");
             if (isMatch(card)) {
-                System.out.println("Card is a match");
                 checkCardIsBombCard(card);
                 markCardsAsMatched(card);
                 isGameOver();
-                // gameOver();
             } else {
-                waitIfNoMatch(getClickedCard(), card);
+                waitIfNoMatch(cardStack.peek(), card);
+                cardStack.pop();
             }
         }
 
-        private void checkCardIsBombCard(Card card){
-            System.out.println("Check if bombCard");
-            if (card instanceof BombCard && clickedCard instanceof BombCard) {
-                System.out.println("is Bomb Card");
+        private void checkCardIsBombCard(Card currentCard) {
+            Card previousCard = cardStack.peek();
+            if (previousCard instanceof BombCard && currentCard instanceof BombCard) {
                 gameOver();
-                return;
             }
         }
 
         private boolean isMatch(Card card) {
-            return getClickedIcon().equals(card.getIcony());
+            return cardStack.peek().getIcony().equals(card.getIcony());
         }
 
     }
