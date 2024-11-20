@@ -94,14 +94,9 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     public void gameOver() {
         score.endGame();
         score.doMathForScore();
-        //cleanup();
         flip.clearPanel();
         flip.toEndGame(flip);
     }
-
-    // public void cleanup() {
-    //     init = null; //for some reason making init null fucks things up
-    // }
 
     // this method will create a new Data Obj, TODO: is more appropiate for
     // TODO: this method to go in HighScores, or another class
@@ -136,7 +131,6 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     }
 
     protected void markCardsAsMatched(Card card) {
-        // getClickedCard().setCardMatched();
         cardStack.peek().setCardMatched();
         card.setCardMatched();
     }
@@ -162,15 +156,10 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         }
 
         private void handleFirstCardClick(Card card) {
-            // System.out.println("handleFirstCardClick");
             cardStack.push(card);
-            // System.out.println("Added Card to stack, size: " + cardStack.size());
-            // System.out.println(cardStack.peek().getIcony().toString());
-
         }
 
         private void handleSecondCardClick(Card card) {
-            // System.out.println("Checking if card is a match");
             if (isMatch(card)) {
                 checkCardIsBombCard(card);
                 markCardsAsMatched(card);
@@ -178,14 +167,12 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
             } else {
                 waitIfNoMatch(cardStack.peek(), card);
                 cardStack.pop();
-                // System.out.println("Stack size decreased, Size: " + cardStack.size());
             }
         }
 
         private void checkCardIsBombCard(Card currentCard) {
             Card previousCard = cardStack.peek();
             if (previousCard instanceof BombCard && currentCard instanceof BombCard) {
-                //System.out.println("Both cards are BombCards. Game Over!");
                 gameOver();
             }
         }
