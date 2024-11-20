@@ -8,14 +8,13 @@ The game will offer three difficulty levels: easy, medium, and hard. In the easy
 
 
 ## Installation
+Go to https://github.com/ST3ALTHY-0/CIT270FinalProject.com and copy or download the code.
+Or in the terminal clone the repo https://github.com/ST3ALTHY-0/CIT270FinalProject.git.
 
 ```bash
 ## Example command
 git clone https://github.com/ST3ALTHY-0/CIT270FinalProject.git
 cd CIT270FinalProject
-=======
-Go to https://github.com/ST3ALTHY-0/CIT270FinalProject.com and copy or download the code.
-Or in the terminal clone the repo 'https://github.com/ST3ALTHY-0/CIT270FinalProject.git'.
 
 ```bash
 ## Example command
