@@ -26,7 +26,7 @@
 //     static final String INSERT_USERS_SQLITE_STATEMENT = "INSERT OR IGNORE INTO Users(username) VALUES(?)";
 // }
 
-package finalProject.src;
+package src;
 
 public enum SQLiteStatements {
     LOCAL_DB_URL("jdbc:sqlite:finalProject\\db\\matchingGamedb.db"),

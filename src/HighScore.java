@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

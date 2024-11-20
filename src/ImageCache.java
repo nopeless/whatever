@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 import javax.swing.*;
 
@@ -34,15 +34,11 @@ public class ImageCache {
 
         for (File path : imagePathArray) {
             if (!imageCache.containsKey(path)) {// if imagePath does not already exist in the hashmap
+                System.out.println(path.toString());
                 ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path.toString()));// turn the png
-                                                                                                   // FilePath into an
-                                                                                                   // ImageIcon Obj, ImageIcon constructor requires URL type, so thats whats with the ImageCache.class.getResource(path.toString()) 
-                if (path.toString().equals("..\\Resources\\star.png")) {
-                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);
+                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);//going to need resized images for different game modes, due to the changes in Card size
                     imageCache.put(path, resizedImageIcon);
-                } else {
-                    imageCache.put(path, imageIcon); // put that imageIcon in hashmap with index being String filePath
-                }
+  
             }
 
         }
@@ -57,15 +53,19 @@ public class ImageCache {
 
     private static void addFileNamesToArrayList() {
         imagePathArray = new ArrayList<>();
-        imagePathArray.add(new File("..\\Resources\\star.png"));
-        imagePathArray.add(new File("..\\Resources\\apple.jpg"));
-        imagePathArray.add(new File("..\\Resources\\duck.jpg"));
-        imagePathArray.add(new File("..\\Resources\\frog.png"));
-        imagePathArray.add(new File("..\\Resources\\heart.jpg"));
-        imagePathArray.add(new File("..\\Resources\\musicNote.png"));
-        imagePathArray.add(new File("..\\Resources\\smiley.png"));
-        imagePathArray.add(new File("..\\Resources\\turtle.jpg"));
-        imagePathArray.add(new File("..\\Resources\\back.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/apple.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/duck.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/frog.png"));
+        imagePathArray.add(new File("../resources/CardSprites/star.png"));
+        imagePathArray.add(new File("../resources/CardSprites/heart.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/musicNote.png"));
+        imagePathArray.add(new File("../resources/CardSprites/smiley.png"));
+        imagePathArray.add(new File("../resources/CardSprites/turtle.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/cow.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/soccerBall.png"));
+        imagePathArray.add(new File("../resources/CardSprites/back.jpg"));
+        imagePathArray.add(new File("../resources/Other/trees.jpg"));
+        imagePathArray.add(new File("../resources/CardSprites/bomb.png"));
 
     }
 
@@ -74,8 +74,8 @@ public class ImageCache {
         return imagePathArray.get(index);
     }
 
-    public static File getImageFile(String name, String fileType) {//TODO: this is not working : need to probab
-        String targetFilePath = String.format("..\\Resources\\%s.%s", name, fileType);
+    public static File getImageFile(String dir, String name, String fileType) {//TODO: this is not working : need to probab
+        String targetFilePath = String.format("../resources/%s/%s.%s", dir, name, fileType);
         //System.out.println(targetFilePath);
         return new File(targetFilePath);
         //return getImageIcon(new File(targetFilePath));

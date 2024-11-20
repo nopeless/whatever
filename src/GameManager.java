@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 import java.awt.*;
 import javax.swing.Icon;
@@ -174,8 +174,11 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         public void handleCardClick(Card card) {
             card.setFaceUp(true);
             if (isFirstCardClick()) {
+                System.out.println("handle first  click");
                 handleFirstCardClick(card);
             } else {
+                System.out.println("handle second  click");
+
                 handleSecondCardClick(card);
             }
             incrementActionPerformedCounter();
@@ -187,20 +190,29 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
 
         private void handleFirstCardClick(Card card) {
             setClickedCard(card);
+            System.out.println(card.toString());
             setClickedIcon(card.getIcony());
         }
 
         private void handleSecondCardClick(Card card) {
+            System.out.println("Checking if card is a match");
             if (isMatch(card)) {
-                if (card instanceof BombCard) {
-                    gameOver();
-                    return;
-                }
+                System.out.println("Card is a match");
+                checkCardIsBombCard(card);
                 markCardsAsMatched(card);
                 isGameOver();
                 // gameOver();
             } else {
                 waitIfNoMatch(getClickedCard(), card);
+            }
+        }
+
+        private void checkCardIsBombCard(Card card){
+            System.out.println("Check if bombCard");
+            if (card instanceof BombCard && clickedCard instanceof BombCard) {
+                System.out.println("is Bomb Card");
+                gameOver();
+                return;
             }
         }
 

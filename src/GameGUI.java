@@ -1,4 +1,7 @@
-package finalProject.src;
+package src;
+
+import java.awt.Color;
+import java.awt.Dimension;
 
 import javax.swing.*;
 
@@ -16,6 +19,8 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     protected static final int DEFAULT_HEIGHT = 800;
     protected GameMenu gameMenu;
     protected JPanel mainPanel;
+   // private IntroScreen introScreen;
+    private JLayeredPane layeredPane;
 
     public GameGUI() {
         ImageCache.preloadImages();
@@ -24,15 +29,12 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     }
 
     public static void main(String[] args) {
-
-        
         // SwingUtilities.invokeLater(new Runnable() {
         //     @Override
         //     public void run() {
         //         new GameGUI();
         //     }
         // });
-
         //starts code by creating new GameGUI obj
         //this code is exactly the same as the above commented out code
         //this line just uses a lambda in place of the anonymous class
@@ -64,25 +66,33 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     // TODO: add class and method for end game screen
 
+    // public void showGameMenu() {
+    //     introScreen.setVisible(false);
+    //     gameMenu.setVisible(true);
+    // }
+
     public void toGameMenu(GameGUI flip) {
         mainPanel.add(new GameMenu(flip));
         updatePanel(mainPanel);
     }
 
     public void toEasyGame(GameGUI flip) {
+        clearPanel();
         EasyGame eg = new EasyGame(flip, 4, 4);
         mainPanel.add(eg.getInit());
         updatePanel(mainPanel);
     }
 
     public void toMediumGame(GameGUI flip) {
-        MediumGame mg = new MediumGame(flip, 4, 4);
+        clearPanel();
+        MediumGame mg = new MediumGame(flip, 5, 4);
         mainPanel.add(mg.getInit());
         updatePanel(mainPanel);
     }
 
     public void toHardGame(GameGUI flip) {
-        HardGame hg = new HardGame(flip, 4, 4);
+        clearPanel();
+        HardGame hg = new HardGame(flip, 6, 4);
         mainPanel.add(hg.getInit());
         updatePanel(mainPanel);
     }

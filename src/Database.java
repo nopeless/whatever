@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 // Looked up some syntax related to java.sql
 import java.sql.Connection;

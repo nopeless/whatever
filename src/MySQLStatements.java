@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 // public interface MySQLStatements {
 //     static final String SELECT_DATA_MYSQL_STATEMENT = "SELECT u.username, g.gameType, s.score, s.timeStamp FROM Scores AS s JOIN Users AS u ON s.userId = u.id JOIN Games AS g ON s.gameId = g.id LIMIT ?";

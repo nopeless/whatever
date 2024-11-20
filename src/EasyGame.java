@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 //easyGame extends game
 //game calls GameInit
 public class EasyGame extends GameManager {

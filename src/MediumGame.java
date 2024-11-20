@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
     //TODO: add extra stuff here that will make the game more difficult
 

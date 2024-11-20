@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 //this class has been moved to inner class inside GameManager
 //may need to move back here depending on how complex cardClicks can get based on additional card types added later
 public class CardClickHandler1 {

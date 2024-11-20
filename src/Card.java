@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,7 +14,7 @@ public class Card extends JButton {
         this.game = game;
         icony = ImageCache.getImageIcon(imagePath);
         //System.out.println(icony);
-        backIcon = ImageCache.getImageIcon(ImageCache.getImageFile("back", "jpg")); 
+        backIcon = ImageCache.getImageIcon(ImageCache.getImageFile("CardSprites", "back", "jpg")); 
         setFaceUp(false);
         setIcon(backIcon);
         setDisabledIcon(icony);

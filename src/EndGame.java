@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -41,7 +41,7 @@ public void actionPerformed(ActionEvent e){
     }else if(e.getSource() == addHighScore){
     //show pop up screen to add high score
     }else if (e.getSource() == exit){
-        System.exit(0);
+        System.exit(0);//shouldn't prob exit like this
     }
 }
 }

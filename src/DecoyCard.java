@@ -1,4 +1,4 @@
-package finalProject.src;
+package src;
 
 public class DecoyCard {
     
