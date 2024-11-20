@@ -26,8 +26,7 @@ git clone https://github.com/ST3ALTHY-0/CIT270FinalProject.git
 
 
 ## How to Compile and Run
-<<<<<<< HEAD
- You need to be in finalProject directory to ruin the code.
+You need to be in finalProject directory to ruin the code.
 
 ```bash
 ### Compile
