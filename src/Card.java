@@ -52,6 +52,10 @@ public class Card extends JButton {
     public Icon getIcony(){
         return icony;
     }
+    public void setIcony(ImageIcon icon){
+        this.icony = icon;
+    }
+
     public Icon getBackIcon(){
         return backIcon;
     }

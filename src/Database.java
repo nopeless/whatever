@@ -231,7 +231,6 @@ public class Database{
             connection.commit();
             System.out.println("Score inserted.");
         } catch (Exception e) {
-            e.printStackTrace();
             System.out.println("Error inserting data into Scores: " + e.getMessage());
         }
     }
