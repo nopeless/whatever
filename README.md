@@ -21,7 +21,6 @@ Or in the terminal clone the repo 'https://github.com/ST3ALTHY-0/CIT270FinalProj
 ## Example command
 git clone https://github.com/ST3ALTHY-0/CIT270FinalProject.git
 
->>>>>>> 469ad187ece5312771a0c7a4ae2bf94a2ab1b8cd
 ```
 
 
@@ -48,4 +47,3 @@ TODO: explain what each of the functions inside each class do
 
 ## Project authors
 Luke Monroe, Jerin Gamagama, Cody CyberBatMan
->>>>>>> 469ad187ece5312771a0c7a4ae2bf94a2ab1b8cd
