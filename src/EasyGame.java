@@ -6,9 +6,9 @@ public class EasyGame extends GameManager {
 
     public EasyGame(GameGUI flip, int rows, int columns) {
         super("Easy", flip, rows, columns, TWO_SECOND_DELAY);
+        addCardsToGame();
     }
 
-    
 
     //TODO: method to update score
 

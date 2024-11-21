@@ -20,7 +20,7 @@ public class GameBoardInitialization extends JPanel {
         this.game = game;
         flip.setTitle(title);
         initializeBoardPanel();
-        initializeBoardWithCards();
+        //initializeBoardWithCards();
     }
 
     public GameManager getGame() {
@@ -50,22 +50,22 @@ public class GameBoardInitialization extends JPanel {
     }
 
     // shuffles the ArrayList of cards and adds them to panel
-    public void initializeBoardWithCards() {
-        if (game instanceof EasyGame) {
-            createAndAddCardsToArrayList(16);
-        } else if (game instanceof MediumGame) {
-            createAndAddCardsToArrayList(18);
-            addBombCards(2);
-        } else if (game instanceof HardGame) {
-            createAndAddCardsToArrayList(24);// assuming hard mode has 30 cards with 6 "special" cards
-            addBombCards(4);
-            // addDecoyCards(); TODO: make this method
-        }
-        shuffleCards();
-    }
+    // public void initializeBoardWithCards() {
+    //     if (game instanceof EasyGame) {
+    //         createAndAddCardsToArrayList(16);
+    //     } else if (game instanceof MediumGame) {
+    //         createAndAddCardsToArrayList(18);
+    //         addBombCards(2);
+    //     } else if (game instanceof HardGame) {
+    //         createAndAddCardsToArrayList(24);// assuming hard mode has 30 cards with 6 "special" cards
+    //         addBombCards(4);
+    //         // addDecoyCards(); TODO: make this method
+    //     }
+    //     shuffleCards();
+    // }
 
     // shuffles AND adds cards to Panel
-    private void shuffleCards() {
+    public void shuffleCards() {
         Collections.shuffle(boardArrayList);
         for (Component card : boardArrayList) {
             add(card);
@@ -78,22 +78,24 @@ public class GameBoardInitialization extends JPanel {
             if (i % 2 == 0) {// might break if rows or columns is odd instead of even. especially columns
                 createSetOfCards(i / 2);
             }
-
         }
     }
 
-    public void createSetOfCards(int index) {
-        // there are two Cards being created here so that there can be two cards with
-        // the same picture
+    private void createSetOfCards(int index) {
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
         boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
     }
 
-    public void addBombCards(int amount) {
+    
+    private void createSetOfBombCards() {
+        boardArrayList.add(new BombCard(game));
+        boardArrayList.add(new BombCard(game));
+    }
+
+    public void createAndAddBombCards(int amount) {
         for (int i = 0; i < amount; i++) {
             if (i % 2 == 0) {
-                boardArrayList.add(new BombCard(game));
-                boardArrayList.add(new BombCard(game));
+                createSetOfBombCards();
             }
         }
     }
