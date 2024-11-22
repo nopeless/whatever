@@ -39,7 +39,6 @@ public class Card extends JButton {
 
     public void setCardMatched() {
         setEnabled(false);
-        game.setNumOfFaceUpCards((game.getNumOfFaceUpCards() + 1));
     }
 
     public void updateIconBasedOnFaceUp() {

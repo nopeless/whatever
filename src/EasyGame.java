@@ -1,15 +1,15 @@
 package src;
-//easyGame extends game
-//game calls GameInit
-public class EasyGame extends GameManager {
-    private static final int TWO_SECOND_DELAY = 2000;
+public class EasyGame extends GameBoardInitialization{
+
+    private static final int DELAY = 2000;
 
     public EasyGame(GameGUI flip, int rows, int columns) {
-        super("Easy", flip, rows, columns, TWO_SECOND_DELAY);
+        super("Hard Memory Match Card Game", flip, rows, columns, DELAY);
+        addCardsToGame();
     }
 
+    //might need to override the isGameOver() funtion to account for the bomb Cards
+
+
     
-
-    //TODO: method to update score
-
 }

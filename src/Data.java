@@ -40,10 +40,10 @@ public class Data {
         return gameType;
     }
 
-    public static String getGameTypeToString(GameManager game){
-        if (game instanceof EasyGame){
+    public static String getGameTypeToString(GameBoardInitialization init){
+        if (init instanceof EasyGame){
             return "Easy";
-        }else if (game instanceof MediumGame){
+        }else if (init instanceof MediumGame){
             return "Medium";
         }else{
             return "Hard";

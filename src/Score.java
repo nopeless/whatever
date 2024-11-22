@@ -12,8 +12,8 @@ public class Score {
     private static final int TIME_FACTOR = 10000;
 
 
-    public Score(GameManager game){
-        gameDifficultyScoreMultiplier = setGameDifficultyScoreMultiplier(game);
+    public Score(GameBoardInitialization init){
+        gameDifficultyScoreMultiplier = setGameDifficultyScoreMultiplier(init);
     }
 
     public void startGame() {
@@ -32,20 +32,20 @@ public class Score {
     //have score
 
     public void doMathForScore(){
-        System.out.println(getElapsedTime());
+        //System.out.println(getElapsedTime());
         long elapsedTime = getElapsedTime();
         //getElapsedTime();
-        //do some math with the time it took them to finish and game difficulty.
+        //looked up this formula
         double timeFactor = (double) elapsedTime / TIME_FACTOR;
         int calculatedScore = (int) (BASE_SCORE / (1 + timeFactor));
-        System.out.println("Score is: " + calculatedScore * gameDifficultyScoreMultiplier);
+        //System.out.println("Score is: " + calculatedScore * gameDifficultyScoreMultiplier);
         score = calculatedScore * gameDifficultyScoreMultiplier;
         }
 
-    public byte setGameDifficultyScoreMultiplier(GameManager game){
-        if (game instanceof EasyGame){
+    public byte setGameDifficultyScoreMultiplier(GameBoardInitialization init){
+        if (init instanceof EasyGame){
             return 1;
-        }else if (game instanceof MediumGame){
+        }else if (init instanceof MediumGame){
             return 2;
         }else{
             return 3;
@@ -55,5 +55,9 @@ public class Score {
 
     public int getScore(){
         return score;
+    }
+
+    public void setScore(int score){
+        this.score = score;
     }
 }

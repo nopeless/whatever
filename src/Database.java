@@ -14,43 +14,83 @@ import java.util.ArrayList;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.nio.file.Paths;
 
-public class Database{
+public class Database {
     private Connection connection;
     private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
-                                // false = remote)
+                                 // false = remote)
 
     public Database() {
-        // soup = localDb
-        // load cred.env
-        Dotenv dotenv = Dotenv.configure()
-                .directory(Paths.get("finalProject/private").toString())
-                .filename("cred.env")
-                .load();
-
+        //soup = isUsingLocalDB;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             if (soup) {
-                connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL.getSql());
-                connection.setAutoCommit(false); // had problems with autoCommit so turned it off
-                if (!doesTablesExist()) {
-                    createTables();
-                    insertDataIntoGames();
-                    System.out.println("tables created");
-                }
-                System.out.println("Local database connection established.");
-
+                getLocalDBConnection();
             } else {
-                // need to try this twice, wait a sec in between tries, do in a seperate thread
-                connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
-                        dotenv.get("DB_PASSWORD"));
-                        connection.setAutoCommit(false); // had problems with autoCommit so turned it off
-
-                System.out.println("Remote Database connection established.");
+                getRemoteDBConnection();
             }
+            // System.out.println(connection.toString());
+            // System.out.println("Here");
+
         } catch (ClassNotFoundException e) {
             System.out.println("JDBC Driver not found.");
+        }
+    }
+
+    public void deleteAllDataFromScoresRemote() {
+        if (soup) {
+            System.out.println("This operation is only for remote databases.");
+            return;
+        }
+
+        String deleteScoresData = "DELETE FROM Scores";
+
+        try (Statement stmt = connection.createStatement()) {
+            connection.setAutoCommit(false); // Start transaction
+            stmt.execute(deleteScoresData);
+            connection.commit(); // Commit transaction
+            System.out.println("All data has been deleted from Scores table successfully.");
         } catch (SQLException e) {
-            System.out.println("Failed to establish database connection.");
+            e.printStackTrace();
+            System.out.println("Error deleting data from Scores table: " + e.getMessage());
+            rollbackTransaction();
+        }
+    }
+
+    public void setSoup(boolean soup) {
+        this.soup = soup;
+    }
+
+    private void getRemoteDBConnection() {
+
+        Dotenv dotenv = Dotenv.configure()
+                .directory(Paths.get("./private").toString()) //TODO
+                .filename("cred.env")
+                .load();
+        try {
+            connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
+                    dotenv.get("DB_PASSWORD"));
+            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
+            System.out.println("Remote Database connection established.");
+            return;
+        } catch (Exception e) {
+            System.out.println("Remote Database connection failed to established.");
+            //getRemoteDBConnection();//maybe dont do this
+        }
+
+    }
+
+    private void getLocalDBConnection() {
+        try {
+            connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL.getSql());
+            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
+            if (!doesTablesExist()) {
+                createTables();
+                insertDataIntoGames();
+                System.out.println("tables created");
+            }
+            System.out.println("Local database connection established.");
+        } catch (SQLException e) {
+            System.out.println("Failed to establish local database connection.");
         }
     }
 
@@ -74,11 +114,11 @@ public class Database{
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.rollback();
-                System.out.println("Transaction rolled back.");
+                // System.out.println("Transaction rolled back.");
             }
         } catch (SQLException e) {
             // e.printStackTrace();
-            System.out.println("Failed to rollback transaction.");
+            // System.out.println("Failed to rollback transaction.");
         }
     }
 
@@ -255,7 +295,7 @@ public class Database{
     public ArrayList<Data> selectDataFromScores(int numOfRows) {
         ArrayList<Data> dataList = new ArrayList<>();
         String sql = getSQLStatement(SQLiteStatements.SELECT_DATA_FROM_SCORES.getSql(),
-                MySQLStatements.SELECT_DATA_FROM_SCORES.getSql() );
+                MySQLStatements.SELECT_DATA_FROM_SCORES.getSql());
         // System.out.println(sql);
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -272,7 +312,7 @@ public class Database{
                     if (soup) {
                         timeStamp = rs.getLong("timeStamp"); // Slight difference in how data is stored remotely vs
                                                              // locally means we need to retrieve data slightly
-                                                             // differently   TODO: this is bad and should be redesigned
+                                                             // differently TODO: this is bad and should be redesigned
                     } else {
                         timeStamp = rs.getTimestamp("timeStamp").getTime();
                     }
