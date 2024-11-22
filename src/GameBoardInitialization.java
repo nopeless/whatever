@@ -6,29 +6,19 @@ import javax.swing.JPanel;
 import java.util.Collections;
 
 public class GameBoardInitialization extends JPanel {
-    private GameGUI flip;// don't really need this as of now
     private GameManager game;
     private int rows;
     private int columns;
     private ArrayList<Component> boardArrayList;
 
-    public GameBoardInitialization(String title, GameGUI flip, int rows, int columns, GameManager game) {
-        this.flip = flip;
+    public GameBoardInitialization(String title, GameGUI flip, int rows, int columns, int delay) {
         this.rows = rows;
         this.columns = columns;
         boardArrayList = new ArrayList<>();
-        this.game = game;
+        game = new GameManager(flip, delay, this);
         flip.setTitle(title);
         initializeBoardPanel();
         //initializeBoardWithCards();
-    }
-
-    public GameManager getGame() {
-        return game;
-    }
-
-    public void setGame(GameManager game) {
-        this.game = game;
     }
 
     public ArrayList<Component> getBoardArrayList() {
@@ -48,21 +38,6 @@ public class GameBoardInitialization extends JPanel {
         revalidate();
         repaint();
     }
-
-    // shuffles the ArrayList of cards and adds them to panel
-    // public void initializeBoardWithCards() {
-    //     if (game instanceof EasyGame) {
-    //         createAndAddCardsToArrayList(16);
-    //     } else if (game instanceof MediumGame) {
-    //         createAndAddCardsToArrayList(18);
-    //         addBombCards(2);
-    //     } else if (game instanceof HardGame) {
-    //         createAndAddCardsToArrayList(24);// assuming hard mode has 30 cards with 6 "special" cards
-    //         addBombCards(4);
-    //         // addDecoyCards(); TODO: make this method
-    //     }
-    //     shuffleCards();
-    // }
 
     // shuffles AND adds cards to Panel
     public void shuffleCards() {
@@ -90,6 +65,11 @@ public class GameBoardInitialization extends JPanel {
     private void createSetOfBombCards() {
         boardArrayList.add(new BombCard(game));
         boardArrayList.add(new BombCard(game));
+    }
+
+    public void addCardsToGame(){
+        createAndAddCardsToArrayList(rows * columns);
+        shuffleCards();
     }
 
     public void createAndAddBombCards(int amount) {

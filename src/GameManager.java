@@ -1,47 +1,31 @@
 package src;
 
 import java.awt.*;
-import javax.swing.Icon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.Timer;
 import java.util.Stack;
 
-public abstract class GameManager {// doesnt really need to be abstract as of now because isGameOver can be taken
-                                   // care of exclusively in this class
+public class GameManager {
     protected GameGUI flip;
-    protected Score score; // TODO: score is unimplemented for now, can maybe make score based on gameType,
-                           // like
-                           // TODO: you get more points per card match in HardGame than in EasyGame
-                           // TODO: and make it so you get more points if you take less time to finish the
-                           // TODO: game, and also more points for the less amount of card flips it takes
-                           // TODO: you to finish the game.
+    protected Score score; 
     private int delay;
     private int actionPerformedCounter;
     private GameBoardInitialization init;
     private Stack<Card> cardStack;
 
-    public GameManager(String title, GameGUI flip, int rows, int columns, int delay) {
+    public GameManager(GameGUI flip, int delay, GameBoardInitialization init) {
         this.flip = flip;
         this.delay = delay;
+        this.init = init;
         cardStack = new Stack<>();
-        init = new GameBoardInitialization(title, flip, rows, columns, this);
-        startTrackingScore(this);
+        startTrackingScore();
         //db = new Database();//TODO: move this to HighScore Screen later
         // saveData();//
     }
 
-    public GameBoardInitialization getInit() {
-        return init;
-    }
-
-    public void addCardsToGame(){
-        init.createAndAddCardsToArrayList(16);
-        init.shuffleCards();
-    }
-
-    public void startTrackingScore(GameManager game) {
-        score = new Score(game);
+    public void startTrackingScore() {
+        score = new Score(init);
         score.startGame();
     }
 
@@ -87,36 +71,25 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         }
     }
 
-    public void isGameOver() {
-        if (cardStack.size() == (init.getBoardArrayList().size() / 2)) {
-            gameOver();
-            //System.out.println("Gammeee over");
+    public void isGameOver(Boolean didWin) {
+        if (cardStack.size() == (init.getBoardArrayList().size() / 2)) {//TODO: game over doesnt work if bombCards are in deck
+            gameOver(didWin);
         }
     }
 
-    public void gameOver() {
-        endGameTasks();
-        score.doMathForScore();
-        saveData(); //move save data to HighScore screen later
-    }
-
-    public void gameOverBomb() {
-        score.setScore(0);
-        endGameTasks();
-        saveData();
-    }
-
-    private void endGameTasks() {
+    public void gameOver(Boolean didWin) {
         score.endGame();
+        if (didWin) score.doMathForScore();
+        if (!didWin) score.setScore(0);
         flip.clearPanel();
         flip.toEndGame(flip);
-    }
+        }
 
     // this method will create a new Data Obj, TODO: is more appropiate for
     // TODO: this method to go in HighScores, or another class
     protected void saveData() {
-        System.out.println("real score: " + score.getScore());
-        Data data = new Data(score.getScore(), Data.getGameTypeToString(this), "Luke");// testing
+        //System.out.println("real score: " + score.getScore());
+        Data data = new Data(score.getScore(), Data.getGameTypeToString(init), "Luke");// testing: TODO: when the method is moved to highScore add var for name
         GameGUI.db.insertDataIntoUsers(data);
         GameGUI.db.insertDataIntoScores(data);
         // db.printAllData();
@@ -134,11 +107,6 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     public void incrementActionPerformedCounter() {
         this.actionPerformedCounter++;
     }
-
-    // protected void markCardsAsMatched(Card card) {
-    //     cardStack.peek().setFaceUp();
-    //     card.setFaceUp();
-    // }
 
     class CardClickHandler {
         public CardClickHandler(Card card) {
@@ -168,7 +136,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
             if (isMatch(card)) {
                 checkCardIsBombCard(card);
                 //markCardsAsMatched(card);
-                isGameOver();
+                isGameOver(true);
             } else {
                 waitIfNoMatch(cardStack.peek(), card);
                 cardStack.pop();
@@ -178,12 +146,13 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         private void checkCardIsBombCard(Card currentCard) {
             Card previousCard = cardStack.peek();
             if (previousCard instanceof BombCard && currentCard instanceof BombCard) {
-                gameOverBomb();
+                gameOver(false);
             }
         }
 
-        private boolean isMatch(Card card) {
-            return cardStack.peek().getIcony().equals(card.getIcony());
+        private boolean isMatch(Card currentCard) {
+            Card previousCard = cardStack.peek();
+            return previousCard.getIcony().equals(currentCard.getIcony());
         }
 
     }

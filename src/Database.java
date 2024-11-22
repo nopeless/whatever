@@ -16,10 +16,11 @@ import java.nio.file.Paths;
 
 public class Database {
     private Connection connection;
-    private boolean soup = false;// controls if DB uses remote db or local db in the db directory(tr ue = local :
+    private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
                                  // false = remote)
 
     public Database() {
+        //soup = isUsingLocalDB;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             if (soup) {
@@ -55,31 +56,25 @@ public class Database {
         }
     }
 
-    public void setSoup(boolean soup){
+    public void setSoup(boolean soup) {
         this.soup = soup;
     }
 
     private void getRemoteDBConnection() {
-        try {
 
-            for (int index = 0; index < 5; index++) {
-                Dotenv dotenv = Dotenv.configure()
-                        .directory(Paths.get("../private").toString())
-                        .filename("cred.env")
-                        .load();
-                try {
-                    connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
-                            dotenv.get("DB_PASSWORD"));
-                    connection.setAutoCommit(false); // had problems with autoCommit so turned it off
-                    System.out.println("Remote Database connection established.");
-                    return;
-                } catch (Exception e) {
-                    System.out.println("Remote Database connection failed to established.");
-                }
-                Thread.sleep(2500);
-            }
+        Dotenv dotenv = Dotenv.configure()
+                .directory(Paths.get("./private").toString()) //TODO
+                .filename("cred.env")
+                .load();
+        try {
+            connection = DriverManager.getConnection(dotenv.get("DB_URL"), dotenv.get("DB_USER"),
+                    dotenv.get("DB_PASSWORD"));
+            connection.setAutoCommit(false); // had problems with autoCommit so turned it off
+            System.out.println("Remote Database connection established.");
+            return;
         } catch (Exception e) {
-            // TODO: handle exception later for highscore class
+            System.out.println("Remote Database connection failed to established.");
+            //getRemoteDBConnection();//maybe dont do this
         }
 
     }
@@ -119,11 +114,11 @@ public class Database {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.rollback();
-                //System.out.println("Transaction rolled back.");
+                // System.out.println("Transaction rolled back.");
             }
         } catch (SQLException e) {
             // e.printStackTrace();
-            //System.out.println("Failed to rollback transaction.");
+            // System.out.println("Failed to rollback transaction.");
         }
     }
 
