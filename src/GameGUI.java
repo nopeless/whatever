@@ -5,13 +5,17 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
                                      // initializeFrame method
     protected static final int DEFAULT_WIDTH = 800;
     protected static final int DEFAULT_HEIGHT = 800;
-    protected GameMenu gameMenu;
-    protected JPanel mainPanel;
-
+    private JPanel mainPanel;
+    protected static Database db;
 
     public GameGUI() {
         ImageCache.preloadImages();
+        setupDB();
         initializeFrame();
+    }
+
+    private void setupDB(){
+        new Thread(() -> db = new Database()).start();
     }
 
     public static void main(String[] args) {
@@ -67,7 +71,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     public void toHardGame(GameGUI flip) {
         clearPanel();
-        HardGame hg = new HardGame(flip, 6, 4);
+        HardGame hg = new HardGame(flip, 4, 6);
         mainPanel.add(hg.getInit());
         updatePanel(mainPanel);
     }

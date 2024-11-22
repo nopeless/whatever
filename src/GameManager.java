@@ -17,7 +17,6 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
                            // TODO: game, and also more points for the less amount of card flips it takes
                            // TODO: you to finish the game.
     private int delay;
-    private int numOfFaceUpCards;
     private int actionPerformedCounter;
     private GameBoardInitialization init;
     private Stack<Card> cardStack;
@@ -28,11 +27,17 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         cardStack = new Stack<>();
         init = new GameBoardInitialization(title, flip, rows, columns, this);
         startTrackingScore(this);
-        // saveData();// TODO: remove later, should go in HighScores class when created
+        //db = new Database();//TODO: move this to HighScore Screen later
+        // saveData();//
     }
 
     public GameBoardInitialization getInit() {
         return init;
+    }
+
+    public void addCardsToGame(){
+        init.createAndAddCardsToArrayList(16);
+        init.shuffleCards();
     }
 
     public void startTrackingScore(GameManager game) {
@@ -85,15 +90,24 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     public void isGameOver() {
         if (cardStack.size() == (init.getBoardArrayList().size() / 2)) {
             gameOver();
-            System.out.println("Gammeee over");
+            //System.out.println("Gammeee over");
         }
     }
 
-    // just a different way of checking if game is over, idk if we should use this
-    // or the abstract method
     public void gameOver() {
-        score.endGame();
+        endGameTasks();
         score.doMathForScore();
+        saveData(); //move save data to HighScore screen later
+    }
+
+    public void gameOverBomb() {
+        score.setScore(0);
+        endGameTasks();
+        saveData();
+    }
+
+    private void endGameTasks() {
+        score.endGame();
         flip.clearPanel();
         flip.toEndGame(flip);
     }
@@ -101,21 +115,12 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
     // this method will create a new Data Obj, TODO: is more appropiate for
     // TODO: this method to go in HighScores, or another class
     protected void saveData() {
-        Data data = new Data(3000, Data.getGameTypeToString(this), "Luke");// testing
-        // data database obj
-        Database db = new Database();
-        db.insertDataIntoUsers(data);
-        db.insertDataIntoScores(data);
+        System.out.println("real score: " + score.getScore());
+        Data data = new Data(score.getScore(), Data.getGameTypeToString(this), "Luke");// testing
+        GameGUI.db.insertDataIntoUsers(data);
+        GameGUI.db.insertDataIntoScores(data);
         // db.printAllData();
-        db.selectDataFromScores(10);
-    }
-
-    public int getNumOfFaceUpCards() {
-        return numOfFaceUpCards;
-    }
-
-    public void setNumOfFaceUpCards(int numOfFaceUpCards) {
-        this.numOfFaceUpCards = numOfFaceUpCards;
+        GameGUI.db.selectDataFromScores(10);
     }
 
     public int getActionPerformedCounter() {
@@ -130,10 +135,10 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         this.actionPerformedCounter++;
     }
 
-    protected void markCardsAsMatched(Card card) {
-        cardStack.peek().setCardMatched();
-        card.setCardMatched();
-    }
+    // protected void markCardsAsMatched(Card card) {
+    //     cardStack.peek().setFaceUp();
+    //     card.setFaceUp();
+    // }
 
     class CardClickHandler {
         public CardClickHandler(Card card) {
@@ -148,7 +153,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
                 handleSecondCardClick(card);
             }
             incrementActionPerformedCounter();
-            System.out.println(getActionPerformedCounter() + "\n");
+            //System.out.println(getActionPerformedCounter() + "\n");
         }
 
         private boolean isFirstCardClick() {
@@ -162,7 +167,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         private void handleSecondCardClick(Card card) {
             if (isMatch(card)) {
                 checkCardIsBombCard(card);
-                markCardsAsMatched(card);
+                //markCardsAsMatched(card);
                 isGameOver();
             } else {
                 waitIfNoMatch(cardStack.peek(), card);
@@ -173,7 +178,7 @@ public abstract class GameManager {// doesnt really need to be abstract as of no
         private void checkCardIsBombCard(Card currentCard) {
             Card previousCard = cardStack.peek();
             if (previousCard instanceof BombCard && currentCard instanceof BombCard) {
-                gameOver();
+                gameOverBomb();
             }
         }
 
