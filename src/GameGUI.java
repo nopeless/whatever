@@ -58,21 +58,21 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     public void toEasyGame(GameGUI flip) {
         clearPanel();
         EasyGame eg = new EasyGame(flip, 4, 4);
-        mainPanel.add(eg.getInit());
+        mainPanel.add(eg);
         updatePanel(mainPanel);
     }
 
     public void toMediumGame(GameGUI flip) {
         clearPanel();
         MediumGame mg = new MediumGame(flip, 5, 4);
-        mainPanel.add(mg.getInit());
+        mainPanel.add(mg);
         updatePanel(mainPanel);
     }
 
     public void toHardGame(GameGUI flip) {
         clearPanel();
         HardGame hg = new HardGame(flip, 4, 6);
-        mainPanel.add(hg.getInit());
+        mainPanel.add(hg);
         updatePanel(mainPanel);
     }
     public void toEndGame(GameGUI flip) {
