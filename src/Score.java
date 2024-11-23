@@ -27,18 +27,11 @@ public class Score {
     public long getElapsedTime() {
         return endTime - startTime;
     }
-    //stop the timer after game is over
-    //do some math
-    //have score
 
     public void doMathForScore(){
-        //System.out.println(getElapsedTime());
         long elapsedTime = getElapsedTime();
-        //getElapsedTime();
-        //looked up this formula
         double timeFactor = (double) elapsedTime / TIME_FACTOR;
         int calculatedScore = (int) (BASE_SCORE / (1 + timeFactor));
-        //System.out.println("Score is: " + calculatedScore * gameDifficultyScoreMultiplier);
         score = calculatedScore * gameDifficultyScoreMultiplier;
         }
 
@@ -50,7 +43,6 @@ public class Score {
         }else{
             return 3;
         }
-
     }
 
     public int getScore(){

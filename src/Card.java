@@ -6,8 +6,8 @@ import java.io.File;
 //note: don't need to implement actionListener bc Java knows to use the ActionListener functional interface because of the context in which the lambda expression is used.
 public class Card extends JButton {
     private boolean isFaceUp;
-    private ImageIcon icony;//rename later
-    private ImageIcon backIcon;//rename later
+    private ImageIcon icony;
+    private ImageIcon backIcon;
 
     public Card(File imagePath, GameManager game) {
         icony = ImageCache.getImageIcon(imagePath);
@@ -15,10 +15,9 @@ public class Card extends JButton {
         setFaceUp(false);
         setIcon(backIcon);
         setDisabledIcon(icony);
-        //addActionListener(this);
         addActionListener(e -> game.new CardClickHandler(this));
         }
-    //replaced this code with the above lambda expression, lambdas are neat.
+    //replaced this code with the above lambda expression
     // @Override
     // public void actionPerformed(ActionEvent e) {
     //     //CardClickHandler1 click = new CardClickHandler1(game);

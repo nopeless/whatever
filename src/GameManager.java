@@ -80,8 +80,6 @@ public class GameManager {
     public void gameOver(Boolean didWin) {
         score.endGame();
         if (didWin) score.doMathForScore();
-        //if (!didWin) score.setScore(0);
-        System.out.println("score: " + score.getScore());
         flip.clearPanel();
         flip.toEndGame(flip);
         }
@@ -89,11 +87,9 @@ public class GameManager {
     // this method will create a new Data Obj, TODO: is more appropiate for
     // TODO: this method to go in HighScores, or another class
     protected void saveData() {
-        //System.out.println("real score: " + score.getScore());
         Data data = new Data(score.getScore(), Data.getGameTypeToString(init), "Luke");// testing: TODO: when the method is moved to highScore add var for name
         GameGUI.db.insertDataIntoUsers(data);
         GameGUI.db.insertDataIntoScores(data);
-        // db.printAllData();
         GameGUI.db.selectDataFromScores(10);
     }
 
@@ -136,7 +132,6 @@ public class GameManager {
         private void handleSecondCardClick(Card card) {
             if (isMatch(card)) {
                 checkCardIsBombCard(card);
-                //markCardsAsMatched(card);
                 isGameOver(true);
             } else {
                 waitIfNoMatch(cardStack.peek(), card);

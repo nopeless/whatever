@@ -3,7 +3,7 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 
-public class EndGame extends JPanel implements CenterButtonsOnPanel {
+public class EndGame extends JPanel implements CenterButtonPanel {
     private JButton menu;
     private JButton addHighScore;
     private JButton exit;
@@ -15,10 +15,10 @@ public class EndGame extends JPanel implements CenterButtonsOnPanel {
         initButtons();
         addButtons();
     }
-
-    private void addButtons() {
+    @Override
+    public void addButtons() {
          add(Box.createVerticalGlue());
-        initializeButtonPanel(this, menu, addHighScore, exit); // Add buttons
+         initializeButtonPanel(this, menu, addHighScore, exit); // Add buttons
          add(Box.createVerticalGlue());
     }
 
@@ -34,7 +34,7 @@ public class EndGame extends JPanel implements CenterButtonsOnPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // super.paintComponent(g);
+        super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }

@@ -20,7 +20,6 @@ public class GameBoardInitialization extends JPanel {
         game = new GameManager(flip, delay, this);
         flip.setTitle(title);
         initializeBoardPanel();
-        //initializeBoardWithCards();
     }
 
     public ArrayList<Component> getCardArrayList() {
@@ -53,13 +52,13 @@ public class GameBoardInitialization extends JPanel {
         }
     }
 
-    // creates card objects and adds them to an ArrayList
     public void createAndAddCardsToArrayList(int amount) {
         for (int i = 0; i < amount; i++) {
-            if (i % 2 == 0) {// might break if rows or columns is odd instead of even. especially columns
+            if (i % 2 == 0) {
                 createSetOfCards(i / 2);
             }
         }
+        //separate the cards that need to be matched to win and cards that need to be left face down to win
         winConditionCardsList = new ArrayList<>(cardArrayList);
     }
 

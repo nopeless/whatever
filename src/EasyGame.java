@@ -6,10 +6,5 @@ public class EasyGame extends GameBoardInitialization{
     public EasyGame(GameGUI flip, int rows, int columns) {
         super("Hard Memory Match Card Game", flip, rows, columns, DELAY);
         addCardsToGame();
-    }
-
-    //might need to override the isGameOver() funtion to account for the bomb Cards
-
-
-    
+    }    
 }

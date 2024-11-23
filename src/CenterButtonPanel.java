@@ -3,14 +3,14 @@ package src;
 import javax.swing.*;
 import java.awt.*;
 
-public interface CenterButtonsOnPanel {
+public interface CenterButtonPanel {
 
     ImageIcon backgroundIcon = ImageCache.getImageIcon(ImageCache.getImageFile("Other", "trees", "jpg"));
     Image backgroundImage = backgroundIcon.getImage();
 
-
-    default JPanel initializeButtonPanel(JPanel parentPanel, JButton... buttons) {
-        parentPanel.setLayout(new BoxLayout(parentPanel, BoxLayout.Y_AXIS));
+    //
+    default JPanel initializeButtonPanel(JPanel panel, JButton... buttons) {//JButton... allows for any amount of JButtons to be passed through as args
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
@@ -27,15 +27,19 @@ public interface CenterButtonsOnPanel {
         buttonPanel.add(Box.createHorizontalGlue());
         buttonPanel.setBackground(new Color(0, 0, 0, 128));
         buttonPanel.setOpaque(false);
-        parentPanel.add(buttonPanel);
 
-        return parentPanel;
+        panel.add(buttonPanel);
+        return panel;
     }
-    default void initializeGridBagLayout(JPanel parentPanel){
-        parentPanel.setPreferredSize(new Dimension(GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT));
-        parentPanel.setBounds(0, 0, GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT);
-        parentPanel.setLayout(new GridBagLayout());
+
+    //Im not 100% sure why this was needed to center elements on a panel but it is, and deleting it messes things up
+    default void initializeGridBagLayout(JPanel panel){
+        panel.setPreferredSize(new Dimension(GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT));
+        panel.setBounds(0, 0, GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT);
+        panel.setLayout(new GridBagLayout());
     }
+
+    void addButtons();
 
     
 }

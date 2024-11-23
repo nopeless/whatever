@@ -1,19 +1,14 @@
 package src;
 
-import java.io.*;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Graphics;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.io.File;
+import java.awt.*;
+import javax.swing.*;
 
-public class GameMenu extends JPanel implements CenterButtonsOnPanel {
+public class GameMenu extends JPanel implements CenterButtonPanel {
+   
+    private static final int INTRO_PANEL_WIDTH = 400;
+    private static final int INTRO_PANEL_HEIGHT = 200;
+
     private JButton easyButton;
     private JButton mediumButton;
     private JButton hardButton;
@@ -22,18 +17,23 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
     private ButtonBox buttonBoxPanel;
     private JButton infoButton;
 
+
     public GameMenu(GameGUI flip) {
         this.flip = flip;
-        initializeGridBagLayout(this);
-        initButtons();
-        buttonBoxPanel = new ButtonBox();
-        intro = new IntroScreen();
-        // buttonBox.initializeButtonBox();
+        initializeComponents();
         if (RunChecker.createCheckFile()) {
             toInfoPanel();
         } else {
             toButtonBox();
         }
+    }
+
+    private void initializeComponents(){
+        initializeGridBagLayout(this);
+        initButtons();
+        buttonBoxPanel = new ButtonBox();
+        addButtons();
+        intro = new IntroScreen();
     }
 
     public GameMenu getGameMenu() {
@@ -74,16 +74,20 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // super.paintComponent(g);
+         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
     }
 
+    @Override
+    public void addButtons() {
+        buttonBoxPanel.addButtons();
+    }
+
     class ButtonBox extends JPanel {
-        public ButtonBox() {
+        public void addButtons(){
             initializeButtonPanel(this, easyButton, mediumButton, hardButton);
-    
             add(Box.createVerticalGlue());
             add(Box.createVerticalStrut(20));
             add(infoButton);
@@ -91,7 +95,6 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
             setBackground(new Color(0, 0, 0, 128));
             setOpaque(false);
         }
-
     }
 
     class IntroScreen extends JPanel {
@@ -104,7 +107,7 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
 
         public void initializeIntroScreen() {
             setBorder(BorderFactory.createLineBorder(Color.BLACK, 2, true));
-            setPreferredSize(new Dimension(400, 200));
+            setPreferredSize(new Dimension(INTRO_PANEL_WIDTH, INTRO_PANEL_HEIGHT));
             setLayout(new BorderLayout());
 
             okButton = new JButton("OK");
@@ -122,17 +125,12 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
     }
 
     static class RunChecker {
-        // check if theres a file
-        // if there is set/return true
-        // else create the file
-        private static File checkFile = new File("./private/check.txt");
-
-        // private static boolean fileExists;
+        private static final File CHECK_FILE = new File("./private/check.txt");
         public static boolean createCheckFile() {
             try {
-                return checkFile.createNewFile();
+                return CHECK_FILE.createNewFile();
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 return false;
             }
         }

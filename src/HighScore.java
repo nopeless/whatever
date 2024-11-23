@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 //This class need implemented so that on main panel you see a button that will lead you to a screen with high scores displayed
 
 public class HighScore extends JPanel implements ActionListener{
-    protected static String name;
+    private static String name;
 
     public HighScore(GameGUI flip){
         initializeHighScorePanel();

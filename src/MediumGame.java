@@ -1,6 +1,5 @@
 package src;
 public class MediumGame extends GameBoardInitialization{
-    //TODO: add extra stuff here that will make the game more difficult
     private static final int DELAY = 1500;
 
     public MediumGame(GameGUI flip, int rows, int columns) {
@@ -14,9 +13,4 @@ public class MediumGame extends GameBoardInitialization{
         createAndAddBombCards(4);
         shuffleCards();
     }
-   
-    //might need to override the isGameOver() funtion to account for the bomb Cards
-
-
-    
 }

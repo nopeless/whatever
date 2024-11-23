@@ -16,8 +16,7 @@ public class ImageCache {
 
     // this method retrieves an image from the cache or loads it if not present
     public static ImageIcon getImageIcon(File imagePath) {
-        // Check if the image is already cached
-        if (!imageCache.containsKey(imagePath)) {// this shouldn't be needed but just in case
+        if (!imageCache.containsKey(imagePath)) {
             ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(imagePath.toString()));
             imageCache.put(imagePath, imageIcon);
         }
@@ -29,14 +28,11 @@ public class ImageCache {
     // game
     public static void preloadImages() {
         addFileNamesToArrayList();
-        ImageIcon resizedImageIcon = null; 
-
+        ImageIcon resizedImageIcon; 
         for (File path : imagePathArray) {
-            if (!imageCache.containsKey(path)) {// if imagePath does not already exist in the hashmap
-                System.out.println(path.toString());
-                ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path.toString()));// turn the png
-                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);//going to need resized images for different game modes, due to the changes in Card size
-                    imageCache.put(path, resizedImageIcon);
+            if (!imageCache.containsKey(path)) {
+                ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path.toString()));
+                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);
   
             }
 
@@ -75,11 +71,9 @@ public class ImageCache {
     }
 
     //we use this method to grab a certin File based on its name and path
-    public static File getImageFile(String dir, String name, String fileType) {//TODO: this is not working : need to probab
+    public static File getImageFile(String dir, String name, String fileType) {
         String targetFilePath = String.format("../resources/%s/%s.%s", dir, name, fileType);
-        //System.out.println(targetFilePath);
         return new File(targetFilePath);
-        //return getImageIcon(new File(targetFilePath));
     }
 
 }
