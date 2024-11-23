@@ -29,13 +29,13 @@ public class ImageCache {
     public static void preloadImages() {
         addFileNamesToArrayList();
         ImageIcon resizedImageIcon; 
+
         for (File path : imagePathArray) {
             if (!imageCache.containsKey(path)) {
                 ImageIcon imageIcon = new ImageIcon(ImageCache.class.getResource(path.toString()));
-                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);
-  
+                    resizedImageIcon = resizeImageIcon(imageIcon, 200, 200);//could change this for hard mode if really needed
+                    imageCache.put(path, resizedImageIcon);
             }
-
         }
     }
 
