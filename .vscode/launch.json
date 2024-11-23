@@ -9,13 +9,6 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "GameGUI",
-            "request": "launch",
-            "mainClass": "src.GameGUI",
-            "projectName": "finalProject_813a0dbb"
         }
     ]
 }

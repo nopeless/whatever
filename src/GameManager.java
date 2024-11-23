@@ -80,7 +80,8 @@ public class GameManager {
     public void gameOver(Boolean didWin) {
         score.endGame();
         if (didWin) score.doMathForScore();
-        if (!didWin) score.setScore(0);
+        //if (!didWin) score.setScore(0);
+        System.out.println("score: " + score.getScore());
         flip.clearPanel();
         flip.toEndGame(flip);
         }

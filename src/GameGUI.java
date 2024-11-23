@@ -3,19 +3,23 @@ package src;
 import javax.swing.*;
 public class GameGUI extends JFrame {// could make it not extend JFrame by declaring and initializing a JFrame in the
                                      // initializeFrame method
-    protected static final int DEFAULT_WIDTH = 800;
-    protected static final int DEFAULT_HEIGHT = 800;
+    protected static final int DEFAULT_WIDTH = 900;
+    protected static final int DEFAULT_HEIGHT = 900;
     private JPanel mainPanel;
-    protected static Database db;
+    static Database db;
 
     public GameGUI() {
         ImageCache.preloadImages();
-        setupDB();
+        setupDB(true);//TODO: Move the call to the method to HighScore Screen Later
         initializeFrame();
     }
 
-    private void setupDB(){
-        new Thread(() -> db = new Database()).start();
+    void setupDB(boolean isUsingLocalDB){
+        new Thread(() -> db = new Database(isUsingLocalDB)).start();
+    }
+
+    void setupImages(){
+        new Thread(() -> ImageCache.preloadImages()).start();
     }
 
     public static void main(String[] args) {
@@ -43,9 +47,9 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
+        setResizable(true);
 
-        toGameMenu(this);
+        toEndGame(this);
     }
 
     // TODO: add class and method for highscore screen
@@ -71,7 +75,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     public void toHardGame(GameGUI flip) {
         clearPanel();
-        HardGame hg = new HardGame(flip, 4, 6);
+        HardGame hg = new HardGame(flip, 5, 6);
         mainPanel.add(hg);
         updatePanel(mainPanel);
     }

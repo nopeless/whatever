@@ -1,5 +1,6 @@
 package src;
 
+//TODO: To make this class better A: split into multiple classes, like initialization and running db, B: replace the commented out System.out.println's with Log messages that go into Log file
 // Looked up some syntax related to java.sql
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -16,11 +17,12 @@ import java.nio.file.Paths;
 
 public class Database {
     private Connection connection;
+    
     private boolean soup = true;// controls if DB uses remote db or local db in the db directory(tr ue = local :
-                                 // false = remote)
+                                // false = remote)
 
-    public Database() {
-        //soup = isUsingLocalDB;
+    public Database(boolean isUsingLocalDB) {
+         soup = isUsingLocalDB;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             if (soup) {
@@ -36,25 +38,27 @@ public class Database {
         }
     }
 
-    public void deleteAllDataFromScoresRemote() {
-        if (soup) {
-            System.out.println("This operation is only for remote databases.");
-            return;
-        }
+    // public void deleteAllDataFromScoresRemote() {
+    // if (soup) {
+    // System.out.println("This operation is only for remote databases.");
+    // return;
+    // }
 
-        String deleteScoresData = "DELETE FROM Scores";
+    // String deleteScoresData = "DELETE FROM Scores";
 
-        try (Statement stmt = connection.createStatement()) {
-            connection.setAutoCommit(false); // Start transaction
-            stmt.execute(deleteScoresData);
-            connection.commit(); // Commit transaction
-            System.out.println("All data has been deleted from Scores table successfully.");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error deleting data from Scores table: " + e.getMessage());
-            rollbackTransaction();
-        }
-    }
+    // try (Statement stmt = connection.createStatement()) {
+    // connection.setAutoCommit(false); // Start transaction
+    // stmt.execute(deleteScoresData);
+    // connection.commit(); // Commit transaction
+    // System.out.println("All data has been deleted from Scores table
+    // successfully.");
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // System.out.println("Error deleting data from Scores table: " +
+    // e.getMessage());
+    // rollbackTransaction();
+    // }
+    // }
 
     public void setSoup(boolean soup) {
         this.soup = soup;
@@ -63,7 +67,7 @@ public class Database {
     private void getRemoteDBConnection() {
 
         Dotenv dotenv = Dotenv.configure()
-                .directory(Paths.get("./private").toString()) //TODO
+                .directory(Paths.get("./private").toString()) // TODO
                 .filename("cred.env")
                 .load();
         try {
@@ -74,7 +78,7 @@ public class Database {
             return;
         } catch (Exception e) {
             System.out.println("Remote Database connection failed to established.");
-            //getRemoteDBConnection();//maybe dont do this
+            // getRemoteDBConnection();//maybe dont do this
         }
 
     }
@@ -86,11 +90,12 @@ public class Database {
             if (!doesTablesExist()) {
                 createTables();
                 insertDataIntoGames();
-                System.out.println("tables created");
+                // System.out.println("tables created");
             }
             System.out.println("Local database connection established.");
         } catch (SQLException e) {
             System.out.println("Failed to establish local database connection.");
+            // e.printStackTrace();
         }
     }
 
@@ -98,11 +103,11 @@ public class Database {
         try {
             if (connection != null && !connection.isClosed()) {
                 connection.close();
-                System.out.println("Database connection closed.");
+                // System.out.println("Database connection closed.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Failed to close database connection.");
+            // e.printStackTrace();
+            // System.out.println("Failed to close database connection.");
         }
     }
 
@@ -132,16 +137,16 @@ public class Database {
                 ResultSet rs = pstmt.executeQuery();
                 connection.commit();
                 if (!rs.next()) {
-                    System.out.println("Tables don't exist.");
+                    // System.out.println("Tables don't exist.");
                     return false;
                 }
             } catch (SQLException e) {
                 // e.printStackTrace();
-                System.out.println("Error checking table existence: " + e.getMessage());
+                // System.out.println("Error checking table existence: " + e.getMessage());
                 return false;
             }
         }
-        System.out.println("Tables exist.");
+        // System.out.println("Tables exist.");
         return true;
     }
 
@@ -163,10 +168,10 @@ public class Database {
             stmt.execute(dropTable);
             stmt.execute(createTable);
             connection.commit(); // Commit transaction
-            System.out.println("Scores table has been recreated successfully.");
+            // System.out.println("Scores table has been recreated successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error recreating Scores table: " + e.getMessage());
+            // e.printStackTrace();
+            // System.out.println("Error recreating Scores table: " + e.getMessage());
         }
     }
 
@@ -182,10 +187,10 @@ public class Database {
             stmt.execute(dropGamesTable);
             stmt.execute(dropScoresTable);
             connection.commit(); // Commit transaction
-            System.out.println("All tables have been dropped successfully.");
+            // System.out.println("All tables have been dropped successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error dropping tables: " + e.getMessage());
+            // e.printStackTrace();
+            // System.out.println("Error dropping tables: " + e.getMessage());
             rollbackTransaction();
         }
     }
@@ -202,10 +207,10 @@ public class Database {
             stmt.execute(deleteGamesData);
             stmt.execute(deleteScoresData);
             connection.commit(); // Commit transaction
-            System.out.println("All data has been deleted from tables successfully.");
+            // System.out.println("All data has been deleted from tables successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error deleting data from tables: " + e.getMessage());
+            // e.printStackTrace();
+            // System.out.println("Error deleting data from tables: " + e.getMessage());
             rollbackTransaction();
         }
     }
@@ -220,8 +225,8 @@ public class Database {
             connection.commit(); // Commit transaction
             System.out.println("Tables have been created successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error creating tables: " + e.getMessage());
+            // e.printStackTrace();
+            // System.out.println("Error creating tables: " + e.getMessage());
             rollbackTransaction();
         }
     }
@@ -237,7 +242,7 @@ public class Database {
             System.out.println("User inserted.");
         } catch (Exception e) {
             // e.printStackTrace();
-            System.out.println("Error inserting user: " + e.getMessage());
+            // System.out.println("Error inserting user: " + e.getMessage());
         }
     }
 
@@ -249,9 +254,9 @@ public class Database {
                 pstmt.addBatch();
             }
             pstmt.executeBatch();
-            System.out.println("Games inserted.");
+            // System.out.println("Games inserted.");
         } catch (SQLException e) {
-            System.out.println("Error inserting gameTypes: " + e.getMessage());
+            // System.out.println("Error inserting gameTypes: " + e.getMessage());
         }
     }
 
@@ -269,9 +274,9 @@ public class Database {
             pstmt.setLong(4, timeStamp);
             pstmt.executeUpdate();
             connection.commit();
-            System.out.println("Score inserted.");
+            // System.out.println("Score inserted.");
         } catch (Exception e) {
-            System.out.println("Error inserting data into Scores: " + e.getMessage());
+            // System.out.println("Error inserting data into Scores: " + e.getMessage());
         }
     }
 
@@ -287,7 +292,7 @@ public class Database {
             }
         } catch (SQLException e) {
             // e.printStackTrace();
-            System.out.println("Error selecting Id from table: " + e.getMessage());
+            // System.out.println("Error selecting Id from table: " + e.getMessage());
         }
         return -1;
     }
@@ -319,11 +324,11 @@ public class Database {
                     Data data = new Data(username, gameType, score, timeStamp);
                     dataList.add(data);
                 } catch (SQLException e) {
-                    System.out.println("Error parsing data row: " + e.getMessage());
+                    // System.out.println("Error parsing data row: " + e.getMessage());
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error selecting data: " + e.getMessage());
+            // System.out.println("Error selecting data: " + e.getMessage());
         }
 
         // TODO: testing to show data in terminal/ remove later

@@ -7,13 +7,10 @@ import java.io.File;
 public class Card extends JButton {
     private boolean isFaceUp;
     private ImageIcon icony;//rename later
-    private ImageIcon backIcon = null;//rename later
-    private GameManager game;
+    private ImageIcon backIcon;//rename later
 
     public Card(File imagePath, GameManager game) {
-        this.game = game;
         icony = ImageCache.getImageIcon(imagePath);
-        //System.out.println(icony);
         backIcon = ImageCache.getImageIcon(ImageCache.getImageFile("CardSprites", "back", "jpg")); 
         setFaceUp(false);
         setIcon(backIcon);

@@ -10,8 +10,7 @@ import java.io.File;
 //helper class to preload and retrieve images so the game runs without freezing
 public class ImageCache {
 
-    // Hashmap, basically like a python dictionary. Its key, value pair and is
-    // really fast
+    // we create a hashmap here bc its a really quick data structure
     private static HashMap<File, ImageIcon> imageCache = new HashMap<>();
     private static ArrayList<File> imagePathArray;
 
@@ -51,6 +50,8 @@ public class ImageCache {
         return new ImageIcon(newImage);
     }
 
+    //we add all image files to list so that they can be inserted into the hashmap later.
+    //the created arrayList is also used to grab the different Files when creating Cards
     private static void addFileNamesToArrayList() {
         imagePathArray = new ArrayList<>();
         imagePathArray.add(new File("../resources/CardSprites/apple.jpg"));
@@ -69,11 +70,11 @@ public class ImageCache {
 
     }
 
-    // returns fileName of a sprite at specified index
     public static File getImageFile(int index) {
         return imagePathArray.get(index);
     }
 
+    //we use this method to grab a certin File based on its name and path
     public static File getImageFile(String dir, String name, String fileType) {//TODO: this is not working : need to probab
         String targetFilePath = String.format("../resources/%s/%s.%s", dir, name, fileType);
         //System.out.println(targetFilePath);

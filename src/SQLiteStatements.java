@@ -29,7 +29,7 @@
 package src;
 
 public enum SQLiteStatements {
-    LOCAL_DB_URL("jdbc:sqlite:finalProject\\db\\matchingGamedb.db"),
+    LOCAL_DB_URL("jdbc:sqlite:./db/matchingGamedb.db"),
     INSERT_INTO_GAMES("INSERT OR IGNORE INTO Games(gameType) VALUES(?)"),
     CREATE_USERS_TABLE("CREATE TABLE IF NOT EXISTS Users (\n"
             + " id INTEGER PRIMARY KEY AUTOINCREMENT,\n"
