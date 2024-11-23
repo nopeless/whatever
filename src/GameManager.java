@@ -49,7 +49,7 @@ public class GameManager {
 
     // Has to be a better way to do this
     protected void disableAllCards(Card card1, Card card2) {
-        for (Component card : init.getBoardArrayList()) {
+        for (Component card : init.getCardArrayList()) {
             Card cardy = (Card) card;
             if (!cardy.getFaceUp()) {
                 if (cardy != card1 && cardy != card2) {
@@ -62,7 +62,7 @@ public class GameManager {
 
     // Has to be a better way to do this
     protected void enableAllCardsNotMatched() {
-        for (Component card : init.getBoardArrayList()) {
+        for (Component card : init.getCardArrayList()) {
             Card cardy = (Card) card;
             if (!cardy.getFaceUp()) {
                 cardy.setEnabled(true);
@@ -72,7 +72,7 @@ public class GameManager {
     }
 
     public void isGameOver(Boolean didWin) {
-        if (cardStack.size() == (init.getBoardArrayList().size() / 2)) {//TODO: game over doesnt work if bombCards are in deck
+        if (cardStack.size() == (init.getWinConditionCardsList().size() / 2)) {//TODO: game over doesnt work if bombCards are in deck
             gameOver(didWin);
         }
     }

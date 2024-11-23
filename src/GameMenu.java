@@ -7,14 +7,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-//import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-//import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,19 +18,13 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
     private JButton mediumButton;
     private JButton hardButton;
     private GameGUI flip;
-    private Image backgroundImage;
-    private ImageIcon backgroundIcon;
     private IntroScreen intro;
     private ButtonBox buttonBoxPanel;
     private JButton infoButton;
 
     public GameMenu(GameGUI flip) {
         this.flip = flip;
-
-        backgroundIcon = ImageCache.getImageIcon(ImageCache.getImageFile("Other", "trees", "jpg"));
-        backgroundImage = backgroundIcon.getImage();
-
-        initializeGameMenuPanel();
+        initializeGridBagLayout(this);
         initButtons();
         buttonBoxPanel = new ButtonBox();
         intro = new IntroScreen();
@@ -67,14 +55,6 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
         repaint();
     }
 
-    // add buttons to panel
-    private void initializeGameMenuPanel() {
-        setPreferredSize(new Dimension(GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT));
-        setBounds(0, 0, GameGUI.DEFAULT_WIDTH, GameGUI.DEFAULT_HEIGHT);
-        setLayout(new GridBagLayout());
-
-        // setGridBagLayoutConstraintsToCenter();
-    }
 
     private void initButtons() {
         easyButton = new JButton("Easy");
@@ -102,7 +82,6 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
 
     class ButtonBox extends JPanel {
         public ButtonBox() {
-            //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             initializeButtonPanel(this, easyButton, mediumButton, hardButton);
     
             add(Box.createVerticalGlue());
@@ -112,34 +91,7 @@ public class GameMenu extends JPanel implements CenterButtonsOnPanel {
             setBackground(new Color(0, 0, 0, 128));
             setOpaque(false);
         }
-        // public void initializeButtonBox() {
-        // setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // JPanel buttonPanel = new JPanel();
-        // buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
-        // buttonPanel.add(Box.createHorizontalGlue());
-        // buttonPanel.add(easyButton);
-        // buttonPanel.add(Box.createHorizontalStrut(10));
-        // buttonPanel.add(mediumButton);
-        // buttonPanel.add(Box.createHorizontalStrut(10));
-        // buttonPanel.add(hardButton);
-        // buttonPanel.add(Box.createHorizontalGlue());
-        // buttonPanel.setBackground(new Color(0,0,0,128));
-        // buttonPanel.setBackground(new Color(0,0,0,128));
-        // buttonPanel.setOpaque(false);
-
-        // add(buttonPanel);
-        // add(Box.createVerticalGlue());
-        // add(Box.createVerticalStrut(20));
-        // add(infoButton);
-
-        // easyButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // mediumButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // hardButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // infoButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // setBackground(new Color(0,0,0,128));
-        // setOpaque(false);
-        // }
     }
 
     class IntroScreen extends JPanel {

@@ -9,24 +9,30 @@ public class GameBoardInitialization extends JPanel {
     private GameManager game;
     private int rows;
     private int columns;
-    private ArrayList<Component> boardArrayList;
+    private ArrayList<Component> cardArrayList;
+    private ArrayList<Component> winConditionCardsList;
+
 
     public GameBoardInitialization(String title, GameGUI flip, int rows, int columns, int delay) {
         this.rows = rows;
         this.columns = columns;
-        boardArrayList = new ArrayList<>();
+        cardArrayList = new ArrayList<>();
         game = new GameManager(flip, delay, this);
         flip.setTitle(title);
         initializeBoardPanel();
         //initializeBoardWithCards();
     }
 
-    public ArrayList<Component> getBoardArrayList() {
-        return boardArrayList;
+    public ArrayList<Component> getCardArrayList() {
+        return cardArrayList;
+    }
+
+    public ArrayList<Component> getWinConditionCardsList() {
+        return winConditionCardsList;
     }
 
     public void setBoardArrayList(ArrayList<Component> listOfButtons) {
-        boardArrayList = listOfButtons;
+        cardArrayList = listOfButtons;
     }
 
     // sets up some basic info for the board
@@ -41,8 +47,8 @@ public class GameBoardInitialization extends JPanel {
 
     // shuffles AND adds cards to Panel
     public void shuffleCards() {
-        Collections.shuffle(boardArrayList);
-        for (Component card : boardArrayList) {
+        Collections.shuffle(cardArrayList);
+        for (Component card : cardArrayList) {
             add(card);
         }
     }
@@ -54,17 +60,18 @@ public class GameBoardInitialization extends JPanel {
                 createSetOfCards(i / 2);
             }
         }
+        winConditionCardsList = new ArrayList<>(cardArrayList);
     }
 
     private void createSetOfCards(int index) {
-        boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
-        boardArrayList.add(new Card(ImageCache.getImageFile(index), game));
+        cardArrayList.add(new Card(ImageCache.getImageFile(index), game));
+        cardArrayList.add(new Card(ImageCache.getImageFile(index), game));
     }
 
     
     private void createSetOfBombCards() {
-        boardArrayList.add(new BombCard(game));
-        boardArrayList.add(new BombCard(game));
+        cardArrayList.add(new BombCard(game));
+        cardArrayList.add(new BombCard(game));
     }
 
     public void addCardsToGame(){

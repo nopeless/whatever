@@ -11,15 +11,15 @@ public class EndGame extends JPanel implements CenterButtonsOnPanel {
 
     public EndGame(GameGUI flip) {
         this.flip = flip;
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Vertical layout
+        initializeGridBagLayout(this);
         initButtons();
         addButtons();
     }
 
     private void addButtons() {
-        add(Box.createVerticalGlue()); // Push content to the center vertically
+         add(Box.createVerticalGlue());
         initializeButtonPanel(this, menu, addHighScore, exit); // Add buttons
-        add(Box.createVerticalGlue()); // Push content to the center vertically
+         add(Box.createVerticalGlue());
     }
 
     private void initButtons() {
@@ -30,5 +30,13 @@ public class EndGame extends JPanel implements CenterButtonsOnPanel {
         menu.addActionListener(e -> flip.toGameMenu(flip));
         addHighScore.addActionListener(e -> System.out.println("To highscore"));
         exit.addActionListener(e -> System.exit(0));
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        // super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }

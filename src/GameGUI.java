@@ -49,13 +49,15 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(true);
 
-        toEndGame(this);
+        toGameMenu(this);
     }
 
     // TODO: add class and method for highscore screen
 
     public void toGameMenu(GameGUI flip) {
-        mainPanel.add(new GameMenu(flip));
+        clearPanel();
+        GameMenu gameMenu = new GameMenu(flip);
+        mainPanel.add(gameMenu);
         updatePanel(mainPanel);
     }
 
@@ -80,7 +82,9 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         updatePanel(mainPanel);
     }
     public void toEndGame(GameGUI flip) {
-        mainPanel.add(new EndGame(flip));
+        clearPanel();
+        EndGame endGame = new EndGame(flip);
+        mainPanel.add(endGame);
         updatePanel(mainPanel);
     }
 
