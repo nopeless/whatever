@@ -22,7 +22,8 @@ public class EndGame extends JPanel implements CenterButtonPanel {
          add(Box.createVerticalGlue());
     }
 
-    private void initButtons() {
+    @Override
+    public void initButtons() {
         menu = new JButton("To Menu");
         addHighScore = new JButton("Add your score to high score leader board.");
         exit = new JButton("Exit");

@@ -55,8 +55,8 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
         repaint();
     }
 
-
-    private void initButtons() {
+    @Override
+    public void initButtons() {
         easyButton = new JButton("Easy");
         mediumButton = new JButton("Medium");
         hardButton = new JButton("Hard");

@@ -24,7 +24,7 @@ public class GameManager {
         // saveData();//
     }
 
-    public void startTrackingScore() {
+    private void startTrackingScore() {
         score = new Score(init);
         score.startGame();
     }
@@ -47,12 +47,13 @@ public class GameManager {
         timer.start();
     }
 
-    // Has to be a better way to do this
     protected void disableAllCards(Card card1, Card card2) {
         for (Component card : init.getCardArrayList()) {
             Card cardy = (Card) card;
             if (!cardy.getFaceUp()) {
                 if (cardy != card1 && cardy != card2) {
+                    //we need to change the disabled icon here because usually the disabled Icon is the face up picture,
+                    //but we dont want to reveal that here so we have to change it.[this is not great and should be redesigned]
                     cardy.setDisabledIcon(cardy.getBackIcon());
                 }
                 cardy.setEnabled(false);
@@ -60,19 +61,21 @@ public class GameManager {
         }
     }
 
-    // Has to be a better way to do this
     protected void enableAllCardsNotMatched() {
         for (Component card : init.getCardArrayList()) {
             Card cardy = (Card) card;
             if (!cardy.getFaceUp()) {
                 cardy.setEnabled(true);
+                //we change the disabled icon back to the face up picture (again, poor design)
                 cardy.setDisabledIcon(cardy.getIcony());
             }
         }
     }
 
     public void isGameOver(Boolean didWin) {
-        if (cardStack.size() == (init.getWinConditionCardsList().size() / 2)) {//TODO: game over doesnt work if bombCards are in deck
+        //we check the cardStack size, which contains one out of the two versions of the correctly picked cards 
+        //and we compare that to half the size of the win condition card list. Half because cardStack only contains one version of the correctly picked set of cards
+        if (cardStack.size() == (init.getWinConditionCardsList().size() / 2)) {
             gameOver(didWin);
         }
     }
@@ -118,7 +121,6 @@ public class GameManager {
                 handleSecondCardClick(card);
             }
             incrementActionPerformedCounter();
-            //System.out.println(getActionPerformedCounter() + "\n");
         }
 
         private boolean isFirstCardClick() {
