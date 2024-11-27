@@ -54,44 +54,51 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
-        toEndGame(this);
+        toEndGame(this, null);
     }
 
     // TODO: add class and method for highscore screen
 
     public void toGameMenu(GameGUI flip) {
         clearPanel();
-        GameMenu gameMenu = new GameMenu(flip);
-        mainPanel.add(gameMenu);
+        GameMenu gameMenuScreen = new GameMenu(flip);
+        mainPanel.add(gameMenuScreen);
         updatePanel(mainPanel);
     }
 
     public void toEasyGame(GameGUI flip) {
         clearPanel();
-        EasyGame eg = new EasyGame(flip, 4, 4);// to make this better there should be an exception thrown if eg does not
+        EasyGame egScreen = new EasyGame(flip, 4, 4);// to make this better there should be an exception thrown if eg does not
                                                // make 16 cards
-        mainPanel.add(eg);
+        mainPanel.add(egScreen);
         updatePanel(mainPanel);
     }
 
     public void toMediumGame(GameGUI flip) {
         clearPanel();
-        MediumGame mg = new MediumGame(flip, 5, 4);
-        mainPanel.add(mg);
+        MediumGame mgScreen = new MediumGame(flip, 5, 4);
+        mainPanel.add(mgScreen);
         updatePanel(mainPanel);
     }
 
     public void toHardGame(GameGUI flip) {
         clearPanel();
-        HardGame hg = new HardGame(flip, 4, 6);
-        mainPanel.add(hg);
+        HardGame hgScreen = new HardGame(flip, 4, 6);
+        mainPanel.add(hgScreen);
         updatePanel(mainPanel);
     }
 
-    public void toEndGame(GameGUI flip) {
+    public void toEndGame(GameGUI flip, Score score) {
         clearPanel();
-        EndGame endGame = new EndGame(flip);
-        mainPanel.add(endGame);
+        EndGame endGameScreen = new EndGame(flip, score);
+        mainPanel.add(endGameScreen);
+        updatePanel(mainPanel);
+    }
+
+    public void toHighScore(GameGUI flip, Score score) {
+        clearPanel();
+        HighScore highScoreScreen = new HighScore(flip, score);
+        mainPanel.add(highScoreScreen);
         updatePanel(mainPanel);
     }
 

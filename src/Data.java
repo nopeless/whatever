@@ -14,6 +14,7 @@ public class Data {
     private String name;
     private Timestamp time;
 
+    //for sending data to db
     public Data(int score, String gameType, String name) {
         this.score = score;
         this.gameType = gameType;
@@ -21,8 +22,8 @@ public class Data {
         time = new Timestamp(System.currentTimeMillis());
 
     }
-    // public Data(){};
 
+    //for retriving data from db
     public Data(String name, String gameTypeString, int score, long timeStampMS) {
         this.name = name;
         this.gameType = gameTypeString;
@@ -46,7 +47,7 @@ public class Data {
         return gameType;
     }
 
-    public static String getGameTypeToString(GameBoardInitialization init) {
+    public static String getGameTypeToString(GameBoardInitialization init) {//might not need this method
         if (init instanceof EasyGame) {
             return "Easy";
         } else if (init instanceof MediumGame) {

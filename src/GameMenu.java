@@ -57,6 +57,7 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
 
     @Override
     public void initComponents() {
+        //could make the text, or really any button properties like color, a constant and have them defined at the top of the file
         easyButton = new JButton("Easy");
         mediumButton = new JButton("Medium");
         hardButton = new JButton("Hard");
@@ -74,10 +75,9 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-         super.paintComponent(g);
-        if (backgroundImage != null) {
-            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-        }
+        super.paintComponent(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        
     }
 
     @Override

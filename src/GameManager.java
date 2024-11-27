@@ -24,6 +24,10 @@ public class GameManager {
         // saveData();//
     }
 
+    protected Score getScoreForGame(){
+        return score;
+    }
+
     private void startTrackingScore() {
         score = new Score(init);
         score.startGame();
@@ -84,7 +88,7 @@ public class GameManager {
         score.endGame();
         if (didWin) score.doMathForScore();
         flip.clearPanel();
-        flip.toEndGame(flip);
+        flip.toEndGame(flip, score);
         }
 
     // this method will create a new Data Obj, TODO: is more appropiate for

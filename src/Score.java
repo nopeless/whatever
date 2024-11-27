@@ -46,6 +46,16 @@ public class Score {
         }
     }
 
+    public String getGameType(){
+        if(gameDifficultyScoreMultiplier == 1 ){
+            return "Easy";
+        }else if (gameDifficultyScoreMultiplier == 2){
+            return "Medium";
+        }else{
+            return "Hard";
+        }
+    }
+
     public int getScore(){
         return score;
     }

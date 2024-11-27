@@ -8,20 +8,22 @@ public class HighScore extends JPanel implements CenterButtonPanel{
     private GameGUI flip;
     private String name;
     private Data data;
-    private JTable highScoretTable;//for showing high scores
+    private JTable highScoreTable;//for showing top 10 high scores
     private JToggleButton toggleButtonFordDB;//for choosing local or remote db
-    private JTextField nameField;//for entering the name that the user wants to associate with the highScore
+    private JTextField nameField;//for entering the name that the user wants to associate with their highScore
+    private Score score;//the score the player achieved when playing the game
 
 
-    public HighScore(GameGUI flip){
+    public HighScore(GameGUI flip, Score score){
         this.flip = flip;
+        this.score = score;
         setUpAndAddComponents();
     }
 
     private void setUpAndAddComponents(){
         initializeGridBagLayout(this);//could not use this and the components will be centered but on the top of the panel instead of the true center
         initComponents();
-        initializeCenteredPanel(this, toggleButtonFordDB, highScoretTable, nameField);
+        initializeCenteredPanel(this, toggleButtonFordDB, highScoreTable, nameField);
         addComponents();
     }
 
@@ -36,7 +38,7 @@ public class HighScore extends JPanel implements CenterButtonPanel{
 
     //this method should be called if the user hits the toggle button to change if they want to use the local/remote db
     private void useRemoteDB(){
-        if(GameGUI.db.getSoup() == false) return; //checks if the db is already on the remote db and returns if it is
+        if(GameGUI.db.getSoup() == false) return; //checks if the db is already on the remote db and ends the method if it is
         GameGUI.db.closeConnection();
         GameGUI.db.getRemoteDBConnection();
     }
@@ -51,6 +53,10 @@ public class HighScore extends JPanel implements CenterButtonPanel{
     private void initHighScoreTable(){
         //init the JTable with the highScore data using the 'GameGUI.db.selectDataFromScores(10);' method
 
+    }
+
+    private void setData(){
+        data = new Data(score.getScore() , score.getGameType(), name);
     }
     
 
