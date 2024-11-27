@@ -12,18 +12,18 @@ public class EndGame extends JPanel implements CenterButtonPanel {
     public EndGame(GameGUI flip) {
         this.flip = flip;
         initializeGridBagLayout(this);
-        initButtons();
-        addButtons();
+        initComponents();
+        addComponents();
     }
     @Override
-    public void addButtons() {
+    public void addComponents() {
          add(Box.createVerticalGlue());
-         initializeButtonPanel(this, menu, addHighScore, exit); // Add buttons
+         initializeCenteredPanel(this, menu, addHighScore, exit); // Add buttons
          add(Box.createVerticalGlue());
     }
 
     @Override
-    public void initButtons() {
+    public void initComponents() {
         menu = new JButton("To Menu");
         addHighScore = new JButton("Add your score to high score leader board.");
         exit = new JButton("Exit");

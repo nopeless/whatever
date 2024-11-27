@@ -20,7 +20,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
     // connect before we allow the user to click the buttons on screen
     //we also make the method package-private, so there is no access modifier
     void setupDB(boolean isUsingLocalDB) {
-        new Thread(() -> db = new Database(isUsingLocalDB)).start();
+        new Thread(() -> db = new Database(isUsingLocalDB)).start();//might need to be careful with synchronization/race cases doing this
     }
 
     void setupImages() {
@@ -44,7 +44,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
 
     // initializes the frame and adds a blank panel
     public void initializeFrame() {
-        // create panel
+        // create and add panel 
         mainPanel = new JPanel();
         add(mainPanel);
 
@@ -54,7 +54,7 @@ public class GameGUI extends JFrame {// could make it not extend JFrame by decla
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
 
-        toGameMenu(this);
+        toEndGame(this);
     }
 
     // TODO: add class and method for highscore screen

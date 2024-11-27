@@ -20,7 +20,7 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
 
     public GameMenu(GameGUI flip) {
         this.flip = flip;
-        initializeComponents();
+        setUpAndAddComponents();
         if (RunChecker.createCheckFile()) {
             toInfoPanel();
         } else {
@@ -28,11 +28,11 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
         }
     }
 
-    private void initializeComponents(){
+    private void setUpAndAddComponents(){
         initializeGridBagLayout(this);
-        initButtons();
+        initComponents();
         buttonBoxPanel = new ButtonBox();
-        addButtons();
+        addComponents();
         intro = new IntroScreen();
     }
 
@@ -56,7 +56,7 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
     }
 
     @Override
-    public void initButtons() {
+    public void initComponents() {
         easyButton = new JButton("Easy");
         mediumButton = new JButton("Medium");
         hardButton = new JButton("Hard");
@@ -81,13 +81,13 @@ public class GameMenu extends JPanel implements CenterButtonPanel {
     }
 
     @Override
-    public void addButtons() {
+    public void addComponents() {
         buttonBoxPanel.addButtons();
     }
 
     class ButtonBox extends JPanel {
         public void addButtons(){
-            initializeButtonPanel(this, easyButton, mediumButton, hardButton);
+            initializeCenteredPanel(this, easyButton, mediumButton, hardButton);
             add(Box.createVerticalGlue());
             add(Box.createVerticalStrut(20));
             add(infoButton);

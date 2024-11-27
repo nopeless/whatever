@@ -40,7 +40,11 @@ public class Database {
         this.soup = soup;
     }
 
-    private void getRemoteDBConnection() {
+    public boolean getSoup() {
+        return soup;
+    }
+
+    void getRemoteDBConnection() {
         Dotenv dotenv = Dotenv.configure()
                 .directory(Paths.get("./private").toString())
                 .filename("cred.env")
@@ -57,7 +61,7 @@ public class Database {
 
     }
 
-    private void getLocalDBConnection() {
+    void getLocalDBConnection() {
         try {
             connection = DriverManager.getConnection(SQLiteStatements.LOCAL_DB_URL.getSql());
             connection.setAutoCommit(false); // had problems with autoCommit so turned it off
